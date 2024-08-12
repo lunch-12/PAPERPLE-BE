@@ -29,6 +29,46 @@ public class Paper {
 
     @Column(name = "image", nullable = true, length = 255)
     private String image;
+
+    private Paper(String content, String newspaperLink, int view, String newspaperSummary, String image) {
+        this.content = content;
+        this.newspaperLink = newspaperLink;
+        this.view = view;
+        this.newspaperSummary = newspaperSummary;
+        this.image = image;
+    }
+
+    public static Paper of(String content, String newspaperLink, int view, String newspaperSummary, String image) {
+        return new Paper(content, newspaperLink, view, newspaperSummary, image);
+    }
+
+    public void updateContent(String content) {
+        if (content != null && !content.isEmpty()) {
+            this.content = content;
+        }
+    }
+
+    public void updateNewspaperLink(String newspaperLink) {
+        if (newspaperLink != null && !newspaperLink.isEmpty()) {
+            this.newspaperLink = newspaperLink;
+        }
+    }
+
+    public void updateView(int view) {
+        if (view >= 0) {
+            this.view = view;
+        }
+    }
+
+    public void updateNewspaperSummary(String newspaperSummary) {
+        this.newspaperSummary = newspaperSummary;
+    }
+
+    public void updateImage(String image) {
+        this.image = image;
+    }
+
+
 }
 
 
