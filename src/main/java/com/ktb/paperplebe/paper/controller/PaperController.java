@@ -1,6 +1,7 @@
 package com.ktb.paperplebe.paper.controller;
 
 import com.ktb.paperplebe.paper.dto.PaperRequest;
+import com.ktb.paperplebe.paper.dto.PaperResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
