@@ -30,7 +30,7 @@ public class Paper {
     @Column(name = "image", nullable = true, length = 255)
     private String image;
 
-    private Paper(String content, String newspaperLink, int view, String newspaperSummary, String image) {
+    private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
         this.content = content;
         this.newspaperLink = newspaperLink;
         this.view = view;
@@ -38,33 +38,33 @@ public class Paper {
         this.image = image;
     }
 
-    public static Paper of(String content, String newspaperLink, int view, String newspaperSummary, String image) {
+    public static Paper of(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
         return new Paper(content, newspaperLink, view, newspaperSummary, image);
     }
 
-    public void updateContent(String content) {
+    public void updateContent(final String content) {
         if (content != null && !content.isEmpty()) {
             this.content = content;
         }
     }
 
-    public void updateNewspaperLink(String newspaperLink) {
+    public void updateNewspaperLink(final String newspaperLink) {
         if (newspaperLink != null && !newspaperLink.isEmpty()) {
             this.newspaperLink = newspaperLink;
         }
     }
 
-    public void updateView(int view) {
+    public void updateView(final int view) {
         if (view >= 0) {
             this.view = view;
         }
     }
 
-    public void updateNewspaperSummary(String newspaperSummary) {
+    public void updateNewspaperSummary(final String newspaperSummary) {
         this.newspaperSummary = newspaperSummary;
     }
 
-    public void updateImage(String image) {
+    public void updateImage(final String image) {
         this.image = image;
     }
 

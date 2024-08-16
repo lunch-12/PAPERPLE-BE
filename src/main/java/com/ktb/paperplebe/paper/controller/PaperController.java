@@ -25,7 +25,7 @@ public class PaperController {
         return ResponseEntity.ok(paperResponse);
     }
 
-    @PatchMapping("/{paperId}/edit")
+    @PatchMapping("/{paperId}")
     public ResponseEntity<?> updateRoom(
             @PathVariable Long paperId,
             @RequestBody final PaperRequest paperRequest) {
