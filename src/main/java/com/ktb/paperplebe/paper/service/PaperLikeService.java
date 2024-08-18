@@ -46,16 +46,8 @@ public class PaperLikeService {
 
         Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
 
-        findPaper.increaseLikeCount();
-        paperRepository.saveAndFlush(findPaper); // 낙관적 락 예외 발생 가능성 존재
-
-        saveLikeHistory(findPaper);
-    }
-
-    private void saveLikeHistory(Paper findPaper) {
-        PaperLike like = PaperLike.builder()
-                .paper(findPaper)
-                .build();
+        PaperLike like = new PaperLike(findPaper);
+        findPaper.addLike(like);  // Paper의 좋아요 추가 로직을 호출
 
         paperLikeRepository.save(like);
     }
@@ -64,8 +56,8 @@ public class PaperLikeService {
         PaperLike like = paperLikeRepository.findByPaperId(paperId).orElseThrow(() -> new IllegalStateException("This paper was not previously liked."));
         Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
 
-        findPaper.decreaseLikeCount();
-        paperRepository.saveAndFlush(findPaper); // 낙관적 락 예외 가능성 존재
+        findPaper.removeLike(like);  // Paper의 좋아요 제거 로직을 호출
+
         paperLikeRepository.delete(like);
     }
 
@@ -74,7 +66,7 @@ public class PaperLikeService {
 
         Map<Long, Boolean> result = new HashMap<>();
 
-        paperLikes.forEach(paperLike -> result.put(paperLike.getPaperId(), true));
+        paperLikes.forEach(paperLike -> result.put(paperLike.getPaper().getId(), true));
         paperIds.forEach(paperId -> result.putIfAbsent(paperId, false));
         return result;
     }

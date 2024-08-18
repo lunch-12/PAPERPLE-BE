@@ -31,9 +31,15 @@ public class PaperLike {
     ) {
         this.paper = paper;
         //this.member = member;
+        assignPaper(paper);
     }
 
-    protected PaperLike() {
+    public void assignPaper(Paper paper) {
+        this.paper = paper;
+    }
+
+    public void removePaper() {
+        this.paper = null;
     }
 
     public Long getPaperId() {
