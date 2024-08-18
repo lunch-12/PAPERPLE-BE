@@ -22,7 +22,7 @@ public class Paper {
     private String newspaperLink;
 
     @Column(name = "view", nullable = false)
-    private int view;
+    private int view = 0;
 
     @Column(name = "newspaper_summary", nullable = true, length = 255)
     private String newspaperSummary;
