@@ -8,24 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-package com.daily.daily.post.service;
-
-import com.daily.daily.member.domain.Member;
-import com.daily.daily.member.exception.MemberNotFoundException;
-import com.daily.daily.member.repository.MemberRepository;
-import com.daily.daily.post.domain.HotPost;
-import com.daily.daily.post.domain.Post;
-import com.daily.daily.post.domain.PostLike;
-import com.daily.daily.post.exception.AlreadyLikeException;
-import com.daily.daily.post.exception.NotPreviouslyLikedException;
-import com.daily.daily.post.exception.PostNotFoundException;
-import com.daily.daily.post.repository.HotPostRepository;
-import com.daily.daily.post.repository.PostLikeRepository;
-import com.daily.daily.post.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +22,7 @@ public class PaperLikeService {
     private final PaperRepository paperRepository;
 
     public void increaseLikeCount(Long paperId) {
-        if (paperLikeRepository.existsByPaperId(paperId)) {
+        if (paperLikeRepository.existsByPaper_Id(paperId)) {
             throw new IllegalStateException("This paper has already been liked.");
         }
 
@@ -53,7 +35,7 @@ public class PaperLikeService {
     }
 
     public void decreaseLikeCount(Long paperId) {
-        PaperLike like = paperLikeRepository.findByPaperId(paperId).orElseThrow(() -> new IllegalStateException("This paper was not previously liked."));
+        PaperLike like = paperLikeRepository.findByPaper_Id(paperId).orElseThrow(() -> new IllegalStateException("This paper was not previously liked."));
         Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
 
         findPaper.removeLike(like);  // Paper의 좋아요 제거 로직을 호출
@@ -62,7 +44,7 @@ public class PaperLikeService {
     }
 
     public Map<Long, Boolean> getLikeStatus(List<Long> paperIds) {
-        List<PaperLike> paperLikes = paperLikeRepository.findByPaperIds(paperIds);
+        List<PaperLike> paperLikes = paperLikeRepository.findByPaper_IdIn(paperIds);
 
         Map<Long, Boolean> result = new HashMap<>();
 

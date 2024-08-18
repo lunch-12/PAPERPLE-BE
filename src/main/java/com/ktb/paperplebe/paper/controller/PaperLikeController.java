@@ -1,5 +1,6 @@
-package com.daily.daily.page.controller;
+package com.ktb.paperplebe.paper.controller;
 
+import com.ktb.paperplebe.common.dto.SuccessResponseDTO;
 import com.ktb.paperplebe.paper.service.PaperLikeFacade;
 import com.ktb.paperplebe.paper.service.PaperLikeService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class PaperLikeController {
 
     private final PaperLikeService paperLikeService;
-    private final com.daily.daily.paper.service.PaperLikeFacade paperLikeFacade;
+    private final PaperLikeFacade paperLikeFacade;
 
     @PostMapping("/{paperId}/likes")
     public SuccessResponseDTO increaseLikeCount(

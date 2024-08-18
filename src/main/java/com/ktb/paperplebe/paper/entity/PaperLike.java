@@ -31,7 +31,11 @@ public class PaperLike {
     ) {
         this.paper = paper;
         //this.member = member;
-        assignPaper(paper);
+        //assignPaper(paper);
+    }
+
+    public PaperLike() {
+
     }
 
     public void assignPaper(Paper paper) {

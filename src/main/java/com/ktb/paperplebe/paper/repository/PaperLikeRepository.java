@@ -2,18 +2,17 @@ package com.ktb.paperplebe.paper.repository;
 
 import com.ktb.paperplebe.paper.entity.PaperLike;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PaperLikeRepository extends JpaRepository<PaperLike, Long> {
 
-    @Query("select pl from PaperLike pl where pl.paper.id = :paperId")
-    Optional<PaperLike> findByPaperId(Long paperId);
+    boolean existsByPaper_Id(Long paperId);
 
-    @Query("select pl from PaperLike pl where pl.paper.id in :paperIds")
-    List<PaperLike> findByPaperIds(List<Long> paperIds);
+    // Paper 엔티티의 id를 기준으로 PaperLike 엔티티 조회
+    Optional<PaperLike> findByPaper_Id(Long paperId);
 
-    boolean existsByPaperId(Long paperId);
+    // 여러 Paper 엔티티의 id를 기준으로 PaperLike 엔티티 목록 조회
+    List<PaperLike> findByPaper_IdIn(List<Long> paperIds);
 }
