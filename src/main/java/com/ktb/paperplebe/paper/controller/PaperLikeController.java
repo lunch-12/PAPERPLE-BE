@@ -1,5 +1,6 @@
 package com.daily.daily.page.controller;
 
+import com.ktb.paperplebe.paper.service.PaperLikeFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,31 +13,31 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/pages")
-public class PageLikeController {
+@RequestMapping("/paper")
+@RestController
+public class PaperLikeController {
 
     private final PageLikeService pageLikeService;
-    private final PageLikeFacade pageLikeFacade;
+    private final com.daily.daily.paper.service.PaperLikeFacade paperLikeFacade;
 
-    @PostMapping("/{pageId}/likes")
+    @PostMapping("/{paperId}/likes")
     public SuccessResponseDTO increaseLikeCount(
             //@AuthenticationPrincipal Long memberId,
-            @PathVariable Long pageId) throws InterruptedException {
-        pageLikeFacade.increaseLikeCount(
+            @PathVariable Long paperId) throws InterruptedException {
+        paperLikeFacade.increaseLikeCount(
                 //memberId,
-                pageId);
+                paperId);
         return new SuccessResponseDTO();
     }
 
-    @DeleteMapping("/{pageId}/likes")
+    @DeleteMapping("/{paperId}/likes")
     public SuccessResponseDTO decreaseLikeCount(
             //@AuthenticationPrincipal Long memberId,
-            @PathVariable Long pageId) throws InterruptedException {
-        pageLikeFacade.decreaseLikeCount(
+            @PathVariable Long paperId) throws InterruptedException {
+        paperLikeFacade.decreaseLikeCount(
                //memberId,
-                pageId);
+                paperId);
         return new SuccessResponseDTO();
     }
 
@@ -44,9 +45,9 @@ public class PageLikeController {
     //@Secured(value = "ROLE_MEMBER")
     public Map<Long, Boolean> getLikeStatus(
             //@AuthenticationPrincipal Long memberId,
-            @RequestParam("pageIds") List<Long> pageIds) {
+            @RequestParam("paperIds") List<Long> paperIds) {
         return pageLikeService.getLikeStatus(
                 //memberId,
-                pageIds);
+                paperIds);
     }
 }
