@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
 
     environment {
@@ -17,12 +17,13 @@ pipeline {
         stage('Remove Previous Docker Image') {
             steps {
                 script {
-                    def images = sh(script: 'docker images -a -q', returnStdout: true).trim()
-            
+                    def images = sh(script: "docker images -q '${IMAGE_NAME}'", returnStdout: true).trim()
+
                     if (images) {
-                        sh 'docker rmi -f ${images} || true'
+                        sh "docker rmi -f ${images} || true"
+                        echo "Deleted Docker images: ${images}"
                     } else {
-                        echo 'No Docker images to remove.'
+                        echo "No Docker images found with name: ${IMAGE_NAME}"
                     }
                 }
             }
