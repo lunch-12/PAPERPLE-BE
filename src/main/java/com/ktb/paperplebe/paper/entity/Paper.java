@@ -15,19 +15,19 @@ public class Paper {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content", nullable = false, length = 1000)
+    @Column(nullable = false, length = 1000)
     private String content;
 
-    @Column(name = "newspaper_link", nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
     private String newspaperLink;
 
-    @Column(name = "view", nullable = false)
+    @Column(nullable = false)
     private int view = 0;
 
-    @Column(name = "newspaper_summary", nullable = true, length = 255)
+    @Column(length = 255)
     private String newspaperSummary;
 
-    @Column(name = "image", nullable = true, length = 255)
+    @Column(length = 255)
     private String image;
 
     private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
