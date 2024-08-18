@@ -1,5 +1,6 @@
 package com.daily.daily.paper.service;
 
+import com.ktb.paperplebe.paper.service.PaperLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;

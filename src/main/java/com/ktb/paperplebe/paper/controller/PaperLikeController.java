@@ -1,6 +1,7 @@
 package com.daily.daily.page.controller;
 
 import com.ktb.paperplebe.paper.service.PaperLikeFacade;
+import com.ktb.paperplebe.paper.service.PaperLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import java.util.Map;
 @RestController
 public class PaperLikeController {
 
-    private final PageLikeService pageLikeService;
+    private final PaperLikeService paperLikeService;
     private final com.daily.daily.paper.service.PaperLikeFacade paperLikeFacade;
 
     @PostMapping("/{paperId}/likes")
@@ -46,7 +47,7 @@ public class PaperLikeController {
     public Map<Long, Boolean> getLikeStatus(
             //@AuthenticationPrincipal Long memberId,
             @RequestParam("paperIds") List<Long> paperIds) {
-        return pageLikeService.getLikeStatus(
+        return paperLikeService.getLikeStatus(
                 //memberId,
                 paperIds);
     }
