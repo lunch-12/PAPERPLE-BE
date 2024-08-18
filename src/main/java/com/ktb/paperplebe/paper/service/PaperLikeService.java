@@ -2,6 +2,7 @@ package com.ktb.paperplebe.paper.service;
 
 import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.paper.entity.PaperLike;
+import com.ktb.paperplebe.paper.repository.PaperLikeRepository;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -39,10 +41,10 @@ public class PaperLikeService {
 
     public void increaseLikeCount(Long paperId) {
         if (paperLikeRepository.existsByPaperId(paperId)) {
-            throw new AlreadyLikeException();
+            throw new IllegalStateException("This paper has already been liked.");
         }
 
-        Paper findPaper = paperRepository.findById(paperId).orElseThrow(PaperNotFoundException::new);
+        Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
 
         findPaper.increaseLikeCount();
         paperRepository.saveAndFlush(findPaper); // 낙관적 락 예외 발생 가능성 존재
@@ -59,8 +61,8 @@ public class PaperLikeService {
     }
 
     public void decreaseLikeCount(Long paperId) {
-        PaperLike like = paperLikeRepository.findByPaperId(paperId).orElseThrow(NotPreviouslyLikedException::new);
-        Paper findPaper = paperRepository.findById(paperId).orElseThrow(PaperNotFoundException::new);
+        PaperLike like = paperLikeRepository.findByPaperId(paperId).orElseThrow(() -> new IllegalStateException("This paper was not previously liked."));
+        Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
 
         findPaper.decreaseLikeCount();
         paperRepository.saveAndFlush(findPaper); // 낙관적 락 예외 가능성 존재
