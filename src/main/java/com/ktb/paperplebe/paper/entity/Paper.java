@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,17 +22,20 @@ public class Paper {
     @Column(nullable = false, length = 1000)
     private String content;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String newspaperLink;
+
+    @Column(length = 255)
+    private String newspaperSummary;
 
     @Column(nullable = false)
     private int view = 0;
 
     @Column(length = 255)
-    private String newspaperSummary;
-
-    @Column(length = 255)
     private String image;
+
+    @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaperLike> likes = new ArrayList<>();
 
     private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
         this.content = content;
@@ -41,6 +48,18 @@ public class Paper {
     public static Paper of(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
         return new Paper(content, newspaperLink, view, newspaperSummary, image);
     }
+
+    // 좋아요 수 관련 메서드
+    public void addLike(final PaperLike paperLike) {
+        likes.add(paperLike);
+        paperLike.assignPaper(this);
+    }
+
+    public void removeLike(final PaperLike paperLike) {
+        likes.remove(paperLike);
+        paperLike.removePaper();
+    }
+
 
     public void updateContent(final String content) {
         if (content != null && !content.isEmpty()) {
@@ -67,8 +86,4 @@ public class Paper {
     public void updateImage(final String image) {
         this.image = image;
     }
-
-
 }
-
-
