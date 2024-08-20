@@ -1,10 +1,11 @@
-package com.ktb.paperplebe.paper.service;
+package com.ktb.paperplebe.paper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktb.paperplebe.paper.controller.PaperController;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.fixture.PaperFixture;
+import com.ktb.paperplebe.paper.service.PaperService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
