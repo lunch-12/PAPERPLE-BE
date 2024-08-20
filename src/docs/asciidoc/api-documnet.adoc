@@ -78,3 +78,4 @@ include::{snippets}/좋아요 상태 조회/http-request.adoc[]
 include::{snippets}/좋아요 상태 조회/http-response.adoc[]
 include::{snippets}/좋아요 상태 조회/response-fields.adoc[]
 
+=======

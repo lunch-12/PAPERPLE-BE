@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class Paper {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,6 +59,7 @@ public class Paper {
         likes.remove(paperLike);
         paperLike.removePaper();
     }
+
 
     public void updateContent(final String content) {
         if (content != null && !content.isEmpty()) {
