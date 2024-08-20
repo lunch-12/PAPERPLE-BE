@@ -26,19 +26,19 @@ public class PaperLikeService {
             throw new IllegalStateException("This paper has already been liked.");
         }
 
-        Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
+        Paper findPaper = findPaperOrThrow(paperId);
 
         PaperLike like = new PaperLike(findPaper);
-        findPaper.addLike(like);  // Paper의 좋아요 추가 로직을 호출
+        findPaper.addLike(like);
 
         paperLikeRepository.save(like);
     }
 
     public void decreaseLikeCount(Long paperId) {
         PaperLike like = paperLikeRepository.findByPaper_Id(paperId).orElseThrow(() -> new IllegalStateException("This paper was not previously liked."));
-        Paper findPaper = paperRepository.findById(paperId).orElseThrow(() -> new NoSuchElementException("Paper not found."));
+        Paper findPaper = findPaperOrThrow(paperId);
 
-        findPaper.removeLike(like);  // Paper의 좋아요 제거 로직을 호출
+        findPaper.removeLike(like);
 
         paperLikeRepository.delete(like);
     }
@@ -51,5 +51,10 @@ public class PaperLikeService {
         paperLikes.forEach(paperLike -> result.put(paperLike.getPaper().getId(), true));
         paperIds.forEach(paperId -> result.putIfAbsent(paperId, false));
         return result;
+    }
+
+    private Paper findPaperOrThrow(Long paperId) {
+        return paperRepository.findById(paperId)
+                .orElseThrow(() -> new NoSuchElementException("Paper not found."));
     }
 }
