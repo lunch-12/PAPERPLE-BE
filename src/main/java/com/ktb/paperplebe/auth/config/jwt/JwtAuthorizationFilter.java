@@ -34,6 +34,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        // h2-console 요청은 토큰 검사를 수행하지 않음
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/h2-console")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         Cookie[] cookies = request.getCookies();
         if (cookies == null || !existAccessToken(cookies)) {
             filterChain.doFilter(request, response);
