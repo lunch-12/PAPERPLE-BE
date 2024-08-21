@@ -50,14 +50,14 @@ public class TokenService {
         RefreshToken findRefreshToken = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        User user = userRepository.findById(findRefreshToken.getId())
+        User user = userRepository.findById(findRefreshToken.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        return jwtUtil.generateAccessToken(findRefreshToken.getId(), user.getRole());
+        return jwtUtil.generateAccessToken(findRefreshToken.getUserId(), user.getRole());
     }
 
     public void saveRefreshToken(String refreshToken, Long userId) {
-        refreshTokenRepository.save(new RefreshToken(userId, refreshToken));
+        refreshTokenRepository.save(new RefreshToken(refreshToken, userId));
     }
 
     public void deleteRefreshToken(String refreshToken) {
