@@ -36,6 +36,7 @@ public class User {
         this.socialId = socialId;
         this.role = role;
         this.socialType = socialType;
+        this.profileImage = ""; // TO DO - 기본 프로필 이미지 지정
     }
 
     public void updateNickname(String nickname) {
