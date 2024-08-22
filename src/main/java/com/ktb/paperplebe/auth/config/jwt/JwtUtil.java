@@ -1,6 +1,6 @@
 package com.ktb.paperplebe.auth.config.jwt;
 
-import com.ktb.paperplebe.auth.dto.JwtClaimDTO;
+import com.ktb.paperplebe.auth.dto.JwtClaimResponse;
 import com.ktb.paperplebe.user.constant.UserRole;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
@@ -96,7 +96,7 @@ public class JwtUtil {
         return false;
     }
 
-    public JwtClaimDTO extractClaims(String token) {
+    public JwtClaimResponse extractClaims(String token) {
         Claims payload = Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
@@ -106,7 +106,7 @@ public class JwtUtil {
         Long userId = payload.get(USER_ID_CLAIM, Long.class);
         UserRole userRole = UserRole.valueOf(payload.get(ROLE_CLAIM, String.class));
 
-        return new JwtClaimDTO(userId, userRole);
+        return new JwtClaimResponse(userId, userRole);
     }
 
     public boolean isExpired(String token) {

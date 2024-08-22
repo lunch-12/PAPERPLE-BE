@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class JwtClaimDTO {
+public class JwtClaimResponse {
     private Long userId;
     private UserRole role;
 }

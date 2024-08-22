@@ -1,9 +1,9 @@
 package com.ktb.paperplebe.auth.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ktb.paperplebe.auth.dto.JwtClaimDTO;
+import com.ktb.paperplebe.auth.dto.JwtClaimResponse;
 import com.ktb.paperplebe.auth.service.TokenService;
-import com.ktb.paperplebe.common.dto.ExceptionResponseDTO;
+import com.ktb.paperplebe.common.dto.ExceptionResponse;
 import com.ktb.paperplebe.user.constant.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -78,14 +78,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void issueErrorResponse(HttpServletResponse response) throws IOException {
-        ExceptionResponseDTO exceptionResponseDto = new ExceptionResponseDTO("토큰이 유효하지 않습니다.", 403);
+        ExceptionResponse exceptionResponse = new ExceptionResponse("토큰이 유효하지 않습니다.", 403);
         response.setStatus(403);
         response.setContentType("application/json; charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(exceptionResponseDto));
+        response.getWriter().write(objectMapper.writeValueAsString(exceptionResponse));
     }
 
     private void setAuthInSecurityContext(String accessToken) {
-        JwtClaimDTO claimDTO = jwtUtil.extractClaims(accessToken);
+        JwtClaimResponse claimDTO = jwtUtil.extractClaims(accessToken);
 
         Long userId = claimDTO.getUserId();
         UserRole role = claimDTO.getRole();
