@@ -33,10 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
-//                .csrf(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**") // TO DO - H2 대신 RDS 연동하면 제거
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers // TO DO - H2 대신 RDS 연동하면 제거
                         .frameOptions(frameOptionsConfig ->
                                 frameOptionsConfig.sameOrigin()
