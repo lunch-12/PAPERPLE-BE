@@ -90,7 +90,7 @@ include::{snippets}/사용자 정보 조회/http-request.adoc[]
 include::{snippets}/사용자 정보 조회/http-response.adoc[]
 include::{snippets}/사용자 정보 조회/response-fields.adoc[]
 
-=== 수정
+=== 닉네임 수정
 
 ==== 요청
 
