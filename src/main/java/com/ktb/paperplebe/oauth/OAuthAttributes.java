@@ -16,7 +16,6 @@ public class OAuthAttributes {
     private final String nameAttributeKey;
     private final OAuth2UserInfo oauth2UserInfo;
 
-    @Builder
     private OAuthAttributes(String nameAttributeKey, OAuth2UserInfo oauth2UserInfo) {
         this.nameAttributeKey = nameAttributeKey;
         this.oauth2UserInfo = oauth2UserInfo;
