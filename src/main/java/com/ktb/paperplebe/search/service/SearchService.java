@@ -6,6 +6,7 @@ import com.ktb.paperplebe.paper.repository.PaperRepository;
 import com.ktb.paperplebe.search.dto.SearchRequest;
 import com.ktb.paperplebe.search.dto.SearchResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ import java.util.stream.Collectors;
 public class SearchService {
     private final PaperRepository paperRepository;
 
-    public SearchResponse search(SearchRequest searchRequest) {
-        List<Paper> papers = paperRepository.findByContentContaining(searchRequest.keyword());
+    public SearchResponse search(SearchRequest searchRequest, Pageable pageable) {
+        List<Paper> papers = paperRepository.findByContentContaining(searchRequest.keyword(), pageable);
 
         List<PaperResponse> paperResponses = papers.stream()
                 .map(PaperResponse::of)
