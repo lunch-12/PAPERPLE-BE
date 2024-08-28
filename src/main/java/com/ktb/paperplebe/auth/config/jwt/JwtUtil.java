@@ -107,23 +107,4 @@ public class JwtUtil {
 
         return new JwtClaimResponse(userId, userRole);
     }
-
-    public boolean isExpired(String token) {
-        if (token == null || token.isEmpty()) {
-            log.error("토큰이 null이거나 비어 있습니다.");
-            return true;
-        }
-
-        try {
-            Date expiredAt = Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload().getExpiration();
-
-            return expiredAt.before(new Date());
-        } catch (ExpiredJwtException e) {
-            return true;
-        }
-    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktb.paperplebe.auth.dto.JwtClaimResponse;
 import com.ktb.paperplebe.auth.service.TokenService;
 import com.ktb.paperplebe.common.dto.ExceptionResponse;
+import com.ktb.paperplebe.common.service.CookieService;
 import com.ktb.paperplebe.user.constant.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,6 +31,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
     private final TokenService tokenService;
+    private final CookieService cookieService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -50,22 +52,31 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String accessToken = extractCookie(cookies, ACCESS_TOKEN);
         String refreshToken = extractCookie(cookies, REFRESH_TOKEN);
 
-        // accessToken이 유효한 경우
+        // case1. accessToken이 유효한 경우
         if (accessToken != null && jwtUtil.validateToken(accessToken)) {
             setAuthInSecurityContext(accessToken);
             filterChain.doFilter(request, response);
             return;
         }
 
-        // accessToken이 유효하지 않고 refreshToken이 유효하면 accessToken 갱신
+        // case2. accessToken이 유효하지 않고 refreshToken이 유효하면 accessToken 갱신
         if (refreshToken != null && jwtUtil.validateToken(refreshToken)) {
-            accessToken = tokenService.renewToken(response, accessToken, refreshToken);
+            accessToken = tokenService.renewToken(response, refreshToken);
             setAuthInSecurityContext(accessToken);
             filterChain.doFilter(request, response);
             return;
         }
 
-        // accessToken과 refreshToken이 모두 유효하지 않으면 에러 응답 반환
+        // case3. accessToken과 refreshToken이 모두 유효하지 않으면 에러 응답 반환
+        if (accessToken != null) {
+            cookieService.deleteCookie(response, ACCESS_TOKEN);
+        }
+
+        if (!jwtUtil.validateToken(refreshToken)) {
+            cookieService.deleteCookie(response, REFRESH_TOKEN);
+            tokenService.deleteRefreshToken(refreshToken);
+        }
+
         issueErrorResponse(response);
     }
 
