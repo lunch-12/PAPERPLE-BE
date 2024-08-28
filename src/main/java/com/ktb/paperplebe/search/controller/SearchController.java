@@ -3,6 +3,8 @@ package com.ktb.paperplebe.search.controller;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.service.PaperService;
+import com.ktb.paperplebe.search.dto.SearchRequest;
+import com.ktb.paperplebe.search.dto.SearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
