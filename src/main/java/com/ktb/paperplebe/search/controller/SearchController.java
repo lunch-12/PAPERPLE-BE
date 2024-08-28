@@ -21,7 +21,7 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<?> search(@RequestParam final String keyword,
                                     @RequestParam(defaultValue = "0") final int page,
-                                    @RequestParam(defaultValue = "10") final int size) {
+                                    @RequestParam(defaultValue = "20") final int size) {
         final Pageable pageable = PageRequest.of(page, size);
         final SearchRequest searchRequest = new SearchRequest(keyword);
         final SearchResponse searchResponse = searchService.search(searchRequest, pageable);
