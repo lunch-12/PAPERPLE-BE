@@ -37,6 +37,7 @@ public class OAuthAttributes {
                 .socialType(socialType)
                 .socialId(oauth2UserInfo.getId())
                 .role(UserRole.ROLE_USER)
+                .profileImage(oauth2UserInfo.getProfileImage())
                 .build();
     }
 }

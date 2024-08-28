@@ -31,12 +31,12 @@ public class User {
 
 
     @Builder
-    public User(String nickname, String socialId, UserRole role, SocialType socialType) {
+    public User(String nickname, String socialId, UserRole role, SocialType socialType, String profileImage) {
         this.nickname = nickname;
         this.socialId = socialId;
         this.role = role;
         this.socialType = socialType;
-        this.profileImage = ""; // TO DO - 기본 프로필 이미지 지정
+        this.profileImage = profileImage;
     }
 
     public void updateNickname(String nickname) {
