@@ -15,7 +15,7 @@ public class CorsConfig {
     @Value("${cors.allowed-origins.list}")
     private List<String> allowedOrigins;
 
-    @Bean(name = "corsConfigurationSource")
+    @Bean(name = "localDevCorsConfigurationSource")
     @Profile({"local", "dev"})
     public CorsConfigurationSource localDevCorsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -32,7 +32,7 @@ public class CorsConfig {
         return source;
     }
 
-    @Bean(name = "corsConfigurationSource")
+    @Bean(name = "prodCorsConfigurationSource")
     @Profile({"prod"})
     public CorsConfigurationSource prodCorsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
