@@ -1,6 +1,6 @@
 package com.ktb.paperplebe.paper.controller;
 
-import com.ktb.paperplebe.common.dto.SuccessResponseDTO;
+import com.ktb.paperplebe.common.dto.SuccessResponse;
 import com.ktb.paperplebe.paper.service.PaperLikeFacade;
 import com.ktb.paperplebe.paper.service.PaperLikeService;
 import lombok.RequiredArgsConstructor;
@@ -24,23 +24,23 @@ public class PaperLikeController {
     private final PaperLikeFacade paperLikeFacade;
 
     @PostMapping("/{paperId}/likes")
-    public SuccessResponseDTO increaseLikeCount(
+    public SuccessResponse increaseLikeCount(
             //@AuthenticationPrincipal Long memberId,
             @PathVariable Long paperId) throws InterruptedException {
         paperLikeFacade.increaseLikeCount(
                 //memberId,
                 paperId);
-        return new SuccessResponseDTO();
+        return new SuccessResponse();
     }
 
     @DeleteMapping("/{paperId}/likes")
-    public SuccessResponseDTO decreaseLikeCount(
+    public SuccessResponse decreaseLikeCount(
             //@AuthenticationPrincipal Long memberId,
             @PathVariable Long paperId) throws InterruptedException {
         paperLikeFacade.decreaseLikeCount(
                //memberId,
                 paperId);
-        return new SuccessResponseDTO();
+        return new SuccessResponse();
     }
 
     @GetMapping("/likes")

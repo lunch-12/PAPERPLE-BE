@@ -1,6 +1,8 @@
 package com.ktb.paperplebe.paper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktb.paperplebe.auth.config.jwt.JwtAuthorizationFilter;
+import com.ktb.paperplebe.auth.config.jwt.JwtUtil;
 import com.ktb.paperplebe.paper.controller.PaperController;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
@@ -12,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,10 +29,14 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
-@WebMvcTest(value = PaperController.class)
+@WebMvcTest(value = PaperController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
+})
 @AutoConfigureRestDocs
 public class PaperControllerTest {
 
@@ -42,6 +51,7 @@ public class PaperControllerTest {
 
     @Test
     @DisplayName("페이퍼 생성")
+    @WithMockUser
     public void createPaper() throws Exception {
         // given
         final PaperRequest paperRequest = PaperFixture.createPaperRequest1();
@@ -51,6 +61,7 @@ public class PaperControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/paper")
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(paperRequest))
         );
@@ -80,6 +91,7 @@ public class PaperControllerTest {
 
     @Test
     @DisplayName("페이퍼 조회")
+    @WithMockUser
     public void getPaper() throws Exception {
         // given
         final Long paperId = PaperFixture.PAPER_ID_1;
@@ -110,6 +122,7 @@ public class PaperControllerTest {
 
     @Test
     @DisplayName("페이퍼 수정")
+    @WithMockUser
     public void updatePaper() throws Exception {
         // given
         final Long paperId = PaperFixture.PAPER_ID_1;
@@ -120,6 +133,7 @@ public class PaperControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(patch("/paper/{paperId}", paperId)
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(paperRequest))
         );
@@ -149,12 +163,14 @@ public class PaperControllerTest {
 
     @Test
     @DisplayName("페이퍼 삭제")
+    @WithMockUser
     public void deletePaper() throws Exception {
         // given
         final Long paperId = PaperFixture.PAPER_ID_1;
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/paper/{paperId}", paperId)
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
         );
 

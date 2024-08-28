@@ -7,14 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SuccessResponseDTO {
+public class SuccessResponse {
     private boolean isSuccessful = true;
     private Integer statusCode = 200;
 
-    public SuccessResponseDTO(Integer statusCode) {
+    public SuccessResponse(Integer statusCode) {
         this.statusCode = statusCode;
     }
 
-    public SuccessResponseDTO() {
+    public SuccessResponse() {
     }
 }
