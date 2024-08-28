@@ -19,17 +19,17 @@ public class UserController {
     @Secured(UserRole.ROLE_USER_VALUE)
     @GetMapping()
     public UserInfoResponse getUserInfo(
-            @AuthenticationPrincipal Long id
+            @AuthenticationPrincipal Long userId
     ) {
-        return userService.getUserInfo(id);
+        return userService.getUserInfo(userId);
     }
 
     @Secured(UserRole.ROLE_USER_VALUE)
     @PatchMapping("/nickname")
     public UserInfoResponse updateNickname(
             @RequestBody @Validated UserNicknameRequest nicknameRequest,
-            @AuthenticationPrincipal Long id
+            @AuthenticationPrincipal Long userId
     ) {
-        return userService.updateNickname(id, nicknameRequest.getNickname());
+        return userService.updateNickname(userId, nicknameRequest.getNickname());
     }
 }
