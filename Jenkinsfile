@@ -13,7 +13,7 @@
                 git branch: 'main', url: "https://github.com/${REPO}.git"
             }
         }
-        
+
         stage('Remove Previous Docker Image') {
             steps {
                 script {
@@ -28,7 +28,7 @@
                 }
             }
         }
-            
+
         stage('Build Docker Image') {
             steps {
                 script {
