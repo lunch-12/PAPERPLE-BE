@@ -57,15 +57,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // accessToken이 유효하지 않은 경우
-        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
-            // refreshToken이 유효하면 accessToken 갱신
-            if (refreshToken != null && jwtUtil.validateToken(refreshToken)) {
-                accessToken = tokenService.renewToken(response, accessToken, refreshToken);
-                setAuthInSecurityContext(accessToken);
-                filterChain.doFilter(request, response);
-                return;
-            }
+        // accessToken이 유효하지 않고 refreshToken이 유효하면 accessToken 갱신
+        if (refreshToken != null && jwtUtil.validateToken(refreshToken)) {
+            accessToken = tokenService.renewToken(response, accessToken, refreshToken);
+            setAuthInSecurityContext(accessToken);
+            filterChain.doFilter(request, response);
+            return;
         }
 
         // accessToken과 refreshToken이 모두 유효하지 않으면 에러 응답 반환

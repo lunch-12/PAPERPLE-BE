@@ -9,10 +9,8 @@ import com.ktb.paperplebe.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import static com.ktb.paperplebe.auth.config.jwt.JwtUtil.ACCESS_TOKEN;
 import static com.ktb.paperplebe.auth.config.jwt.JwtUtil.REFRESH_TOKEN;
@@ -49,7 +47,7 @@ public class TokenService {
 
     public String createAccessToken(final String refreshToken) {
         RefreshToken findRefreshToken = refreshTokenRepository.findById(refreshToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException("Refresh Token not found"));
 
         User user = userRepository.findById(findRefreshToken.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
