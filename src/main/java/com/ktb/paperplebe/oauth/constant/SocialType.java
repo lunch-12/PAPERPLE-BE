@@ -16,6 +16,6 @@ public enum SocialType {
         return Arrays.stream(values())
                 .filter(type -> type.id.equals(registrationId))
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new IllegalArgumentException("Invalid social type: " + registrationId));
     }
 }
