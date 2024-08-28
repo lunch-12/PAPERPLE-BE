@@ -13,7 +13,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import static com.ktb.paperplebe.auth.config.jwt.JwtUtil.ACCESS_TOKEN;
-import static com.ktb.paperplebe.auth.config.jwt.JwtUtil.REFRESH_TOKEN;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @RequiredArgsConstructor
@@ -25,24 +24,11 @@ public class TokenService {
     private final CookieService cookieService;
 
 
-    public String renewToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        boolean isAccessTokenExpired = jwtUtil.isExpired(accessToken);
-        boolean isRefreshTokenExpired = jwtUtil.isExpired(refreshToken);
-
-        if (isAccessTokenExpired && isRefreshTokenExpired) {
-            cookieService.deleteCookie(response, ACCESS_TOKEN);
-            cookieService.deleteCookie(response, REFRESH_TOKEN);
-            deleteRefreshToken(refreshToken);
-        }
-
-        if (isAccessTokenExpired) {
-            String renewAccessToken = createAccessToken(refreshToken);
-            ResponseCookie accessCookie = cookieService.createCookie(ACCESS_TOKEN, renewAccessToken);
-            response.addHeader(SET_COOKIE, accessCookie.toString());
-            return accessCookie.getValue();
-        }
-
-        return accessToken;
+    public String renewToken(HttpServletResponse response, String refreshToken) {
+        String renewAccessToken = createAccessToken(refreshToken);
+        ResponseCookie accessCookie = cookieService.createCookie(ACCESS_TOKEN, renewAccessToken);
+        response.addHeader(SET_COOKIE, accessCookie.toString());
+        return accessCookie.getValue();
     }
 
     public String createAccessToken(final String refreshToken) {
