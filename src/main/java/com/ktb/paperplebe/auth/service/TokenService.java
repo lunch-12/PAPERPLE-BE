@@ -37,12 +37,13 @@ public class TokenService {
             deleteRefreshToken(refreshToken);
         }
 
-        if(isAccessTokenExpired) {
+        if (isAccessTokenExpired) {
             String renewAccessToken = createAccessToken(refreshToken);
             ResponseCookie accessCookie = cookieService.createCookie(ACCESS_TOKEN, renewAccessToken);
             response.addHeader(SET_COOKIE, accessCookie.toString());
             return accessCookie.getValue();
         }
+
         return accessToken;
     }
 

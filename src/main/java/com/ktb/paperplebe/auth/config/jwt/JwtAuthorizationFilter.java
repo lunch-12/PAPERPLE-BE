@@ -42,31 +42,34 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         Cookie[] cookies = request.getCookies();
-        if (cookies == null || !existAccessToken(cookies)) {
+        if (cookies == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 토큰 추출
         String accessToken = extractCookie(cookies, ACCESS_TOKEN);
         String refreshToken = extractCookie(cookies, REFRESH_TOKEN);
 
-        if (!jwtUtil.validateToken(accessToken) || !jwtUtil.validateToken(refreshToken)) {
-            issueErrorResponse(response);
+        // accessToken이 유효한 경우
+        if (accessToken != null && jwtUtil.validateToken(accessToken)) {
+            setAuthInSecurityContext(accessToken);
+            filterChain.doFilter(request, response);
             return;
         }
 
-        if (jwtUtil.isExpired(accessToken)) { // 만료되었다면 갱신
-            accessToken = tokenService.renewToken(response, accessToken, refreshToken);
+        // accessToken이 유효하지 않은 경우
+        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
+            // refreshToken이 유효하면 accessToken 갱신
+            if (refreshToken != null && jwtUtil.validateToken(refreshToken)) {
+                accessToken = tokenService.renewToken(response, accessToken, refreshToken);
+                setAuthInSecurityContext(accessToken);
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
-        setAuthInSecurityContext(accessToken);
-        filterChain.doFilter(request, response);
-    }
-
-    private boolean existAccessToken(Cookie[] authCookies) {
-        return Arrays.stream(authCookies)
-                .anyMatch(name -> name.getName().equals(ACCESS_TOKEN));
+        // accessToken과 refreshToken이 모두 유효하지 않으면 에러 응답 반환
+        issueErrorResponse(response);
     }
 
     private String extractCookie(Cookie[] cookies, String cookieName) {
