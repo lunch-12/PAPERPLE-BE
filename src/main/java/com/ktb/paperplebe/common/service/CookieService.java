@@ -26,7 +26,6 @@ public class CookieService {
                 .path("/")
                 .httpOnly(true)
                 .maxAge(0)
-                .maxAge(0)
                 .build();
 
         response.addHeader(SET_COOKIE, deleteCookie.toString());
