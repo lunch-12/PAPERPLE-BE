@@ -13,6 +13,8 @@ public class UserFixture {
 
     public static final String NICKNAME_1 = "testUser1";
 
+    public static final String PROFILE_IMAGE_1 = "";
+
     private static final String SOCIAL_ID_1 = "socialId1";
 
     private static final UserRole ROLE_1 = UserRole.ROLE_USER;
@@ -25,6 +27,7 @@ public class UserFixture {
                 .socialId(SOCIAL_ID_1)
                 .role(ROLE_1)
                 .socialType(SOCIAL_TYPE)
+                .profileImage(PROFILE_IMAGE_1)
                 .build();
         ReflectionTestUtils.setField(user, "id", USER_ID_1);
         return user;
