@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
 
     environment {
@@ -14,10 +14,25 @@ pipeline {
             }
         }
 
+        stage('Remove Previous Docker Image') {
+            steps {
+                script {
+                    def images = sh(script: "docker images -q '${IMAGE_NAME}'", returnStdout: true).trim()
+
+                    if (images) {
+                        sh "docker rmi -f ${images} || true"
+                        echo "Deleted Docker images: ${images}"
+                    } else {
+                        echo "No Docker images found with name: ${IMAGE_NAME}"
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${IMAGE_NAME}:v0")
+                    dockerImage = docker.build("${IMAGE_NAME}:v${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -26,7 +41,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        dockerImage.push('v0')
+                        dockerImage.push("v${env.BUILD_NUMBER}")
                     }
                 }
             }
