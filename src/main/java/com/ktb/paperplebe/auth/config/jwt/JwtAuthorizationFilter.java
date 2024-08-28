@@ -38,7 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         // h2-console 요청은 토큰 검사를 수행하지 않음
         String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/h2-console")) {
+        if (requestURI.startsWith("/h2-console") || requestURI.startsWith("/health") ) {
             filterChain.doFilter(request, response);
             return;
         }
