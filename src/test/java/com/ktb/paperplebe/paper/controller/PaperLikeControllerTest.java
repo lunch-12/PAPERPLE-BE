@@ -1,6 +1,8 @@
 package com.ktb.paperplebe.paper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktb.paperplebe.auth.config.jwt.JwtAuthorizationFilter;
+import com.ktb.paperplebe.auth.config.jwt.JwtUtil;
 import com.ktb.paperplebe.paper.fixture.PaperLikeFixture;
 import com.ktb.paperplebe.paper.service.PaperLikeFacade;
 import com.ktb.paperplebe.paper.service.PaperLikeService;
@@ -10,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -24,11 +29,15 @@ import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Map;
 
-@WebMvcTest(PaperLikeController.class)
+@WebMvcTest(value = PaperLikeController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
+})
 @AutoConfigureRestDocs
 public class PaperLikeControllerTest {
 
@@ -46,12 +55,14 @@ public class PaperLikeControllerTest {
 
     @Test
     @DisplayName("좋아요 증가 테스트")
+    @WithMockUser
     public void increaseLikeCount() throws Exception {
         // given
         willDoNothing().given(paperLikeFacade).increaseLikeCount(anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -69,12 +80,14 @@ public class PaperLikeControllerTest {
 
     @Test
     @DisplayName("좋아요 취소 테스트")
+    @WithMockUser
     public void decreaseLikeCount() throws Exception {
         // given
         willDoNothing().given(paperLikeFacade).decreaseLikeCount(anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -92,6 +105,7 @@ public class PaperLikeControllerTest {
 
     @Test
     @DisplayName("좋아요 상태 조회 테스트")
+    @WithMockUser
     public void getLikeStatus() throws Exception {
         // given
         Map<Long, Boolean> likeStatus = PaperLikeFixture.createLikeStatus();

@@ -90,3 +90,27 @@ include::{snippets}/검색/query-parameters.adoc[]
 ==== 응답
 include::{snippets}/검색/http-response.adoc[]
 include::{snippets}/검색/response-fields.adoc[]
+
+== 사용자
+
+=== 조회
+
+==== 요청
+
+include::{snippets}/사용자 정보 조회/http-request.adoc[]
+
+==== 응답
+include::{snippets}/사용자 정보 조회/http-response.adoc[]
+include::{snippets}/사용자 정보 조회/response-fields.adoc[]
+
+=== 닉네임 수정
+
+==== 요청
+
+include::{snippets}/사용자 닉네임 수정/http-request.adoc[]
+
+==== 응답
+include::{snippets}/사용자 닉네임 수정/http-response.adoc[]
+include::{snippets}/사용자 닉네임 수정/response-fields.adoc[]
+
+=======
