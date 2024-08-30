@@ -15,15 +15,15 @@ public class CorsConfig {
     @Value("${cors.allowed-origins.list}")
     private List<String> allowedOrigins;
 
-    @Bean(name = "localDevCorsConfigurationSource")
-    @Profile({"local", "dev"})
+    @Bean(name = "corsConfigurationSource")
+    @Profile({"local", "develop"})
     public CorsConfigurationSource localDevCorsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept", "Origin"));
+        configuration.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization", "Location", "X-Custom-Header"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -32,7 +32,7 @@ public class CorsConfig {
         return source;
     }
 
-    @Bean(name = "prodCorsConfigurationSource")
+    @Bean(name = "corsConfigurationSource")
     @Profile({"prod"})
     public CorsConfigurationSource prodCorsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
