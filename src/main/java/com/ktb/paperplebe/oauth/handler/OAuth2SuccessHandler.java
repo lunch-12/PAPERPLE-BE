@@ -20,10 +20,8 @@ import static org.springframework.http.HttpHeaders.SET_COOKIE;
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    // TO DO - 프론트엔드 도메인 추가
-//    @Value("${app.properties.frontendDomain}")
-//    private String frontendDomain;
+    @Value("${app.properties.frontendDomain}")
+    private String frontendDomain;
 
     private final JwtUtil jwtUtil;
     private final CookieService cookieService;
@@ -46,7 +44,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.addHeader(SET_COOKIE, accessTokenCookie.toString());
             response.addHeader(SET_COOKIE, refreshTokenCookie.toString());
 
-//            response.sendRedirect(frontendDomain);
+            response.sendRedirect(frontendDomain);
         } catch (Exception e) {
             log.error("OAuth2 Login 성공 후 예외 발생 : {}", e.getMessage());
         }
