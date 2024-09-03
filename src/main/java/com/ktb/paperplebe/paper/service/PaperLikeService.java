@@ -2,6 +2,7 @@ package com.ktb.paperplebe.paper.service;
 
 import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.paper.entity.PaperLike;
+import com.ktb.paperplebe.paper.exception.PaperLikeException;
 import com.ktb.paperplebe.paper.repository.PaperLikeRepository;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.ktb.paperplebe.paper.exception.PaperLikeErrorCode.PAPER_ALREADY_LIKED;
+import static com.ktb.paperplebe.paper.exception.PaperLikeErrorCode.PAPER_NOT_FOUND;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,7 +27,7 @@ public class PaperLikeService {
 
     public void increaseLikeCount(Long paperId) {
         if (paperLikeRepository.existsByPaper_Id(paperId)) {
-            throw new IllegalStateException("This paper has already been liked.");
+            throw new PaperLikeException(PAPER_ALREADY_LIKED);
         }
 
         Paper findPaper = findPaperOrThrow(paperId);
@@ -55,6 +59,6 @@ public class PaperLikeService {
 
     private Paper findPaperOrThrow(Long paperId) {
         return paperRepository.findById(paperId)
-                .orElseThrow(() -> new NoSuchElementException("Paper not found."));
+                .orElseThrow(() -> new PaperLikeException(PAPER_NOT_FOUND));
     }
 }
