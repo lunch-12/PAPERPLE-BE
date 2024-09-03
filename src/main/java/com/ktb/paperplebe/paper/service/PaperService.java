@@ -3,10 +3,13 @@ package com.ktb.paperplebe.paper.service;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.entity.Paper;
+import com.ktb.paperplebe.paper.exception.PaperException;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.ktb.paperplebe.paper.exception.PaperErrorCode.PAPER_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -30,8 +33,7 @@ public class PaperService {
 
     @Transactional
     public PaperResponse updatePaper(Long paperId, PaperRequest paperRequest) {
-        Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid paper ID: " + paperId));
+        Paper paper = findPaperByIdOrThrow(paperId);
 
         paper.updateContent(paperRequest.content());
         paper.updateNewspaperLink(paperRequest.newspaperLink());
@@ -44,16 +46,21 @@ public class PaperService {
     }
 
     public PaperResponse getPaper(Long paperId) {
-        Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new RuntimeException("Invalid paper ID: " + paperId));
+        Paper paper = findPaperByIdOrThrow(paperId);
         return PaperResponse.of(paper);
     }
 
     @Transactional
     public void deletePaper(Long paperId) {
         if (!paperRepository.existsById(paperId)) {
-            throw new RuntimeException("Invalid paper ID: " + paperId);
+            throw new PaperException(PAPER_NOT_FOUND);
         }
         paperRepository.deleteById(paperId);
     }
+
+    private Paper findPaperByIdOrThrow(Long paperId) {
+        return paperRepository.findById(paperId)
+                .orElseThrow(() -> new PaperException(PAPER_NOT_FOUND));
+    }
+
 }
