@@ -33,8 +33,7 @@ public class PaperService {
 
     @Transactional
     public PaperResponse updatePaper(Long paperId, PaperRequest paperRequest) {
-        Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new PaperException(PAPER_NOT_FOUND));
+        Paper paper = findPaperByIdOrThrow(paperId);
 
         paper.updateContent(paperRequest.content());
         paper.updateNewspaperLink(paperRequest.newspaperLink());
@@ -47,8 +46,7 @@ public class PaperService {
     }
 
     public PaperResponse getPaper(Long paperId) {
-        Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new PaperException(PAPER_NOT_FOUND));
+        Paper paper = findPaperByIdOrThrow(paperId);
         return PaperResponse.of(paper);
     }
 
@@ -59,4 +57,10 @@ public class PaperService {
         }
         paperRepository.deleteById(paperId);
     }
+
+    private Paper findPaperByIdOrThrow(Long paperId) {
+        return paperRepository.findById(paperId)
+                .orElseThrow(() -> new PaperException(PAPER_NOT_FOUND));
+    }
+
 }
