@@ -4,10 +4,14 @@ import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.service.PaperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/paper")
@@ -22,12 +26,18 @@ public class PaperController {
     }
 
     @GetMapping("/{paperId}")
-    public ResponseEntity<?> getPaper(@PathVariable Long paperId,
-                                      @RequestParam(defaultValue = "0") final int page,
-                                      @RequestParam(defaultValue = "id") final String orderBy) {
-        final Pageable pageable = PageRequest.of(page, 20);
-        final PaperResponse paperResponse = paperService.getPaper(paperId, orderBy, pageable);
+    public ResponseEntity<?> getPaper(@PathVariable Long paperId) {
+        final PaperResponse paperResponse = paperService.getPaper(paperId);
         return ResponseEntity.ok(paperResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getPaperList(@RequestParam(defaultValue = "0") final int page,
+                                      @RequestParam(defaultValue = "20") final int size,
+                                      @RequestParam(defaultValue = "id") final String orderBy) {
+        final Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        final List<PaperResponse> paperListResponse = paperService.getPaperList(pageable);
+        return ResponseEntity.ok(paperListResponse);
     }
 
     @PatchMapping("/{paperId}")

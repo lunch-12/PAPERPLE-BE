@@ -6,8 +6,12 @@ import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.paper.exception.PaperException;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.ktb.paperplebe.paper.exception.PaperErrorCode.PAPER_NOT_FOUND;
 
@@ -48,6 +52,12 @@ public class PaperService {
     public PaperResponse getPaper(Long paperId) {
         Paper paper = findPaperByIdOrThrow(paperId);
         return PaperResponse.of(paper);
+    }
+
+    public List<PaperResponse> getPaperList(Pageable pageable) {
+        Page<Paper> paperPage = paperRepository.findAll(pageable);
+        Page<PaperResponse> paperResponses = paperPage.map(PaperResponse::of);
+        return paperResponses.getContent();
     }
 
     @Transactional
