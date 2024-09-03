@@ -9,6 +9,7 @@ import com.ktb.paperplebe.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,9 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<?> search(@RequestParam final String keyword,
                                     @RequestParam(defaultValue = "0") final int page,
-                                    @RequestParam(defaultValue = "20") final int size) {
-        final Pageable pageable = PageRequest.of(page, size);
+                                    @RequestParam(defaultValue = "20") final int size,
+                                    @RequestParam(defaultValue = "id") final String orderBy) {
+        final Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         final SearchRequest searchRequest = new SearchRequest(keyword);
         final SearchResponse searchResponse = searchService.search(searchRequest, pageable);
 
