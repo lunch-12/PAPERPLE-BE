@@ -5,6 +5,8 @@ import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.paper.exception.PaperException;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
+import com.ktb.paperplebe.user.entity.User;
+import com.ktb.paperplebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +18,19 @@ import static com.ktb.paperplebe.paper.exception.PaperErrorCode.PAPER_NOT_FOUND;
 @Transactional(readOnly = true)
 public class PaperService {
     private final PaperRepository paperRepository;
+    private final UserService userService;
 
     @Transactional
-    public PaperResponse createPaper(PaperRequest paperRequest) {
+    public PaperResponse createPaper(PaperRequest paperRequest, Long userId) {
+        User user = userService.findById(userId);
+
         Paper paper = Paper.of(
                 paperRequest.content(),
                 paperRequest.newspaperLink(),
                 paperRequest.view(),
                 paperRequest.newspaperSummary(),
-                paperRequest.image()
+                paperRequest.image(),
+                user
         );
 
         Paper savedPaper = paperRepository.save(paper);

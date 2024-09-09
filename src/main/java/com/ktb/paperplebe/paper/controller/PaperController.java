@@ -5,6 +5,7 @@ import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.service.PaperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -14,8 +15,10 @@ public class PaperController {
     private final PaperService paperService;
 
     @PostMapping
-    public ResponseEntity<?> createPaper(@RequestBody final PaperRequest paperRequest) {
-        final PaperResponse paperResponse = paperService.createPaper(paperRequest);
+    public ResponseEntity<?> createPaper(
+            @RequestBody final PaperRequest paperRequest
+            ,@AuthenticationPrincipal Long userId) {
+        final PaperResponse paperResponse = paperService.createPaper(paperRequest, userId);
         return ResponseEntity.ok(paperResponse);
     }
 

@@ -3,7 +3,6 @@ package com.ktb.paperplebe.paper.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktb.paperplebe.auth.config.jwt.JwtAuthorizationFilter;
 import com.ktb.paperplebe.auth.config.jwt.JwtUtil;
-import com.ktb.paperplebe.paper.controller.PaperController;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.fixture.PaperFixture;
@@ -33,6 +32,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
+
+
 @WebMvcTest(value = PaperController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
@@ -57,7 +58,7 @@ public class PaperControllerTest {
         final PaperRequest paperRequest = PaperFixture.createPaperRequest1();
         final PaperResponse expectedResponse = PaperFixture.createPaperResponse1();
 
-        given(paperService.createPaper(any(PaperRequest.class))).willReturn(expectedResponse);
+        given(paperService.createPaper(any(PaperRequest.class), any())).willReturn(expectedResponse);
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/paper")
