@@ -3,6 +3,7 @@ package com.ktb.paperplebe.user.controller;
 import com.ktb.paperplebe.user.constant.UserRole;
 import com.ktb.paperplebe.user.dto.UserInfoResponse;
 import com.ktb.paperplebe.user.dto.UserNicknameRequest;
+import com.ktb.paperplebe.user.dto.UserProfileImageRequest;
 import com.ktb.paperplebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -31,5 +32,14 @@ public class UserController {
             @AuthenticationPrincipal Long userId
     ) {
         return userService.updateNickname(userId, nicknameRequest.getNickname());
+    }
+
+    @Secured(UserRole.ROLE_USER_VALUE)
+    @PatchMapping("/profile-image")
+    public UserInfoResponse updateProfileImage(
+            @RequestBody UserProfileImageRequest profileImageRequest,
+            @AuthenticationPrincipal Long userId
+    ) {
+        return userService.updateProfileImage(userId, profileImageRequest.getProfileImage());
     }
 }

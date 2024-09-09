@@ -1,12 +1,15 @@
 package com.ktb.paperplebe.user.entity;
 
 import com.ktb.paperplebe.oauth.constant.SocialType;
+import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.user.constant.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -29,6 +32,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Paper> papers;
 
     @Builder
     public User(String nickname, String socialId, UserRole role, SocialType socialType, String profileImage) {
@@ -41,5 +46,9 @@ public class User {
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }
