@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.ktb.paperplebe.paper.exception.PaperErrorCode.PAPER_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -54,6 +57,13 @@ public class PaperService {
     public PaperResponse getPaper(Long paperId) {
         Paper paper = findPaperByIdOrThrow(paperId);
         return PaperResponse.of(paper);
+    }
+
+    public List<PaperResponse> getPapersByUser(Long userId) {
+        List<Paper> papers = paperRepository.findByUserId(userId);
+        return papers.stream()
+                .map(PaperResponse::of)
+                .collect(Collectors.toList());
     }
 
     @Transactional

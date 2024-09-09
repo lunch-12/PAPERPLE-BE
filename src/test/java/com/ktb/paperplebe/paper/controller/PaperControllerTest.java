@@ -19,10 +19,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -123,6 +128,38 @@ public class PaperControllerTest {
                 )
         ));
     }
+
+    @Test
+    @DisplayName("페이퍼 목록 조회")
+    @WithMockUser
+    public void getMyPapers() throws Exception {
+        // given
+        final List<PaperResponse> expectedResponse = PaperFixture.createPaperResponseList();
+        given(paperService.getPapersByUser(any())).willReturn(expectedResponse);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/paper/my-papers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf().asHeader())
+        );
+
+        // then
+        resultActions.andExpect(status().isOk());
+
+        // restdocs
+        resultActions.andDo(document("페이퍼 목록 조회",
+                responseFields(
+                        fieldWithPath("[].paperId").type(NUMBER).description("페이퍼 ID"),
+                        fieldWithPath("[].content").type(STRING).description("내용"),
+                        fieldWithPath("[].newspaperLink").type(STRING).description("신문 링크"),
+                        fieldWithPath("[].view").type(NUMBER).description("조회수"),
+                        fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
+                        fieldWithPath("[].image").type(STRING).optional().description("이미지 URL"),
+                        fieldWithPath("[].createdAt").type(STRING).description("생성 시간")
+                )
+        ));
+    }
+
 
     @Test
     @DisplayName("페이퍼 수정")

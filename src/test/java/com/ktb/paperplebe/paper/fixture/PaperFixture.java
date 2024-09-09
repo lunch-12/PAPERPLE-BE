@@ -35,13 +35,15 @@ public class PaperFixture {
     public static final User DUMMY_USER = createDummyUser();
 
     private static User createDummyUser() {
-        return User.builder()
+        User user = User.builder()
                 .nickname("TestUser")
                 .socialId("testUser123")
                 .role(UserRole.ROLE_USER)
                 .socialType(SocialType.KAKAO)
                 .profileImage("http://example.com/profile.jpg")
                 .build();
+        ReflectionTestUtils.setField(user, "id", 1L);
+        return user;
     }
 
     public static Paper createPaper1() {
