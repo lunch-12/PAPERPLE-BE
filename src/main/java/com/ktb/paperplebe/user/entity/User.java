@@ -2,6 +2,7 @@ package com.ktb.paperplebe.user.entity;
 
 import com.ktb.paperplebe.oauth.constant.SocialType;
 import com.ktb.paperplebe.paper.entity.Paper;
+import com.ktb.paperplebe.paper.entity.PaperLike;
 import com.ktb.paperplebe.user.constant.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -34,6 +35,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Paper> papers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaperLike> paperLikes;
 
     @Builder
     public User(String nickname, String socialId, UserRole role, SocialType socialType, String profileImage) {

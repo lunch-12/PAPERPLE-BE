@@ -21,11 +21,11 @@ public class PaperLikeFacade {
         }
     }
 
-    public void increaseLikeCount(Long paperId) throws InterruptedException {
-        executeWithRetry(() -> paperLikeService.increaseLikeCount(paperId));
+    public void increaseLikeCount(Long userId, Long paperId) throws InterruptedException {
+        executeWithRetry(() -> paperLikeService.increaseLikeCount(userId, paperId));
     }
 
-    public void decreaseLikeCount(Long paperId) throws InterruptedException {
-        executeWithRetry(() -> paperLikeService.decreaseLikeCount(paperId));
+    public void decreaseLikeCount(Long userId, Long paperId) throws InterruptedException {
+        executeWithRetry(() -> paperLikeService.decreaseLikeCount(userId, paperId));
     }
 }
