@@ -3,6 +3,7 @@ package com.ktb.paperplebe.paper.fixture;
 import com.ktb.paperplebe.oauth.constant.SocialType;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
+import com.ktb.paperplebe.paper.dto.UserPaperResponse;
 import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.user.constant.UserRole;
 import com.ktb.paperplebe.user.entity.User;
@@ -82,6 +83,25 @@ public class PaperFixture {
         List<PaperResponse> paperResponses = new ArrayList<>();
         paperResponses.add(createPaperResponse1());
         paperResponses.add(createPaperResponse2());
+        return paperResponses;
+    }
+
+    public static UserPaperResponse createUserPaperResponse1() {
+        Paper paper = createPaper1();
+        ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
+        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage());
+    }
+
+    public static UserPaperResponse createUserPaperResponse2() {
+        Paper paper = createPaper2();
+        ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
+        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage());
+    }
+
+    public static List<UserPaperResponse> createUserPaperResponseList() {
+        List<UserPaperResponse> paperResponses = new ArrayList<>();
+        paperResponses.add(createUserPaperResponse1());
+        paperResponses.add(createUserPaperResponse2());
         return paperResponses;
     }
 }

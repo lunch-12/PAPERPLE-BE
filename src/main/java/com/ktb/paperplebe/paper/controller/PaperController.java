@@ -2,6 +2,7 @@ package com.ktb.paperplebe.paper.controller;
 
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
+import com.ktb.paperplebe.paper.dto.UserPaperResponse;
 import com.ktb.paperplebe.paper.service.PaperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,15 @@ public class PaperController {
         return ResponseEntity.ok(paperResponse);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserPapers(@PathVariable Long userId) {
+        List<UserPaperResponse> paperResponse = paperService.getPapersByUser(userId);
+        return ResponseEntity.ok(paperResponse);
+    }
+
     @GetMapping("/my-papers")
     public ResponseEntity<?> getMyPapers(@AuthenticationPrincipal Long userId) {
-        List<PaperResponse> paperResponses = paperService.getPapersByUser(userId);
+        List<UserPaperResponse> paperResponses = paperService.getPapersByUser(userId);
         return ResponseEntity.ok(paperResponses);
     }
 

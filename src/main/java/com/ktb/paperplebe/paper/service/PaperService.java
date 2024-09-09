@@ -2,6 +2,7 @@ package com.ktb.paperplebe.paper.service;
 
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
+import com.ktb.paperplebe.paper.dto.UserPaperResponse;
 import com.ktb.paperplebe.paper.entity.Paper;
 import com.ktb.paperplebe.paper.exception.PaperException;
 import com.ktb.paperplebe.paper.repository.PaperRepository;
@@ -59,10 +60,11 @@ public class PaperService {
         return PaperResponse.of(paper);
     }
 
-    public List<PaperResponse> getPapersByUser(Long userId) {
+    public List<UserPaperResponse> getPapersByUser(Long userId) {
+        User user = userService.findById(userId);
         List<Paper> papers = paperRepository.findByUserId(userId);
         return papers.stream()
-                .map(PaperResponse::of)
+                .map(paper -> UserPaperResponse.of(paper, user.getNickname(), user.getProfileImage()))
                 .collect(Collectors.toList());
     }
 

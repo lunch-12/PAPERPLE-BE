@@ -5,6 +5,7 @@ import com.ktb.paperplebe.auth.config.jwt.JwtAuthorizationFilter;
 import com.ktb.paperplebe.auth.config.jwt.JwtUtil;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
+import com.ktb.paperplebe.paper.dto.UserPaperResponse;
 import com.ktb.paperplebe.paper.fixture.PaperFixture;
 import com.ktb.paperplebe.paper.service.PaperService;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -134,7 +133,7 @@ public class PaperControllerTest {
     @WithMockUser
     public void getMyPapers() throws Exception {
         // given
-        final List<PaperResponse> expectedResponse = PaperFixture.createPaperResponseList();
+        final List<UserPaperResponse> expectedResponse = PaperFixture.createUserPaperResponseList();
         given(paperService.getPapersByUser(any())).willReturn(expectedResponse);
 
         // when
@@ -155,7 +154,9 @@ public class PaperControllerTest {
                         fieldWithPath("[].view").type(NUMBER).description("조회수"),
                         fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
                         fieldWithPath("[].image").type(STRING).optional().description("이미지 URL"),
-                        fieldWithPath("[].createdAt").type(STRING).description("생성 시간")
+                        fieldWithPath("[].createdAt").type(STRING).description("생성 시간"),
+                        fieldWithPath("[].nickname").type(STRING).description("작성자 닉네임"),
+                        fieldWithPath("[].profileImage").type(STRING).description("작성자 프로필 이미지 URL")
                 )
         ));
     }
