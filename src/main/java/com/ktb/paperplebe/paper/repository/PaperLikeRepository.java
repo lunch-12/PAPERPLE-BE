@@ -14,7 +14,7 @@ public interface PaperLikeRepository extends JpaRepository<PaperLike, Long> {
     Optional<PaperLike> findByPaper_Id(Long paperId);
 
     // 여러 Paper 엔티티의 id를 기준으로 PaperLike 엔티티 목록 조회
-    List<PaperLike> findByPaper_IdIn(List<Long> paperIds);
+    List<PaperLike> findByPaper_IdInAndUser_Id(List<Long> paperIds, Long userId);
 
     Optional<PaperLike> findByPaper_IdAndUser_Id(Long paperId, Long userId);
 }

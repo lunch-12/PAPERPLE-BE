@@ -54,8 +54,7 @@ public class PaperLikeService {
     }
 
     public Map<Long, Boolean> getLikeStatus(Long userId, List<Long> paperIds) {
-        List<PaperLike> paperLikes = paperLikeRepository.findByPaper_IdIn(paperIds);
-
+        List<PaperLike> paperLikes = paperLikeRepository.findByPaper_IdInAndUser_Id(paperIds, userId);
         Map<Long, Boolean> result = new HashMap<>();
 
         paperLikes.forEach(paperLike -> result.put(paperLike.getPaper().getId(), true));

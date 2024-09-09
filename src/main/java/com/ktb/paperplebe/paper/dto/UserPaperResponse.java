@@ -3,6 +3,7 @@ package com.ktb.paperplebe.paper.dto;
 import com.ktb.paperplebe.paper.entity.Paper;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public record UserPaperResponse(
         Long paperId,
@@ -13,9 +14,10 @@ public record UserPaperResponse(
         String image,
         LocalDateTime createdAt,
         String nickname,
-        String profileImage
+        String profileImage,
+        boolean isLikedByCurrentUser
 ) {
-    public static UserPaperResponse of(final Paper paper, final String nickname, final String profileImage) {
+    public static UserPaperResponse of(final Paper paper, final String nickname, final String profileImage, final Optional<Boolean> isLikedByCurrentUser) {
         return new UserPaperResponse(
                 paper.getId(),
                 paper.getContent(),
@@ -25,7 +27,8 @@ public record UserPaperResponse(
                 paper.getImage(),
                 paper.getCreatedAt(),
                 nickname,
-                profileImage
+                profileImage,
+                isLikedByCurrentUser.orElse(false)
         );
     }
 }

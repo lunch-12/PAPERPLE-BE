@@ -30,6 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -134,7 +135,7 @@ public class PaperControllerTest {
     public void getMyPapers() throws Exception {
         // given
         final List<UserPaperResponse> expectedResponse = PaperFixture.createUserPaperResponseList();
-        given(paperService.getPapersByUser(any())).willReturn(expectedResponse);
+        given(paperService.getMyPapers(any())).willReturn(expectedResponse);
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/paper/my-papers")
@@ -156,7 +157,8 @@ public class PaperControllerTest {
                         fieldWithPath("[].image").type(STRING).optional().description("이미지 URL"),
                         fieldWithPath("[].createdAt").type(STRING).description("생성 시간"),
                         fieldWithPath("[].nickname").type(STRING).description("작성자 닉네임"),
-                        fieldWithPath("[].profileImage").type(STRING).description("작성자 프로필 이미지 URL")
+                        fieldWithPath("[].profileImage").type(STRING).description("작성자 프로필 이미지 URL"),
+                        fieldWithPath("[].isLikedByCurrentUser").type(BOOLEAN).description("현재 로그인한 유저의 좋아요 여부")
                 )
         ));
     }

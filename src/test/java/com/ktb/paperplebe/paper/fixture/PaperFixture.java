@@ -12,6 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PaperFixture {
 
@@ -89,13 +90,13 @@ public class PaperFixture {
     public static UserPaperResponse createUserPaperResponse1() {
         Paper paper = createPaper1();
         ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
-        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage());
+        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage(), Optional.empty());
     }
 
     public static UserPaperResponse createUserPaperResponse2() {
         Paper paper = createPaper2();
         ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
-        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage());
+        return UserPaperResponse.of(paper, DUMMY_USER.getNickname(), DUMMY_USER.getProfileImage(), Optional.empty());
     }
 
     public static List<UserPaperResponse> createUserPaperResponseList() {

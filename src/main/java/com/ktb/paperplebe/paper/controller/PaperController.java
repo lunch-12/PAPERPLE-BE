@@ -32,14 +32,14 @@ public class PaperController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUserPapers(@PathVariable Long userId) {
-        List<UserPaperResponse> paperResponse = paperService.getPapersByUser(userId);
-        return ResponseEntity.ok(paperResponse);
+    public ResponseEntity<?> getUserPapers(@PathVariable Long userId, @AuthenticationPrincipal Long currentUserId) {
+        List<UserPaperResponse> paperResponses = paperService.getPapersByUser(userId, currentUserId);
+        return ResponseEntity.ok(paperResponses);
     }
 
     @GetMapping("/my-papers")
     public ResponseEntity<?> getMyPapers(@AuthenticationPrincipal Long userId) {
-        List<UserPaperResponse> paperResponses = paperService.getPapersByUser(userId);
+        List<UserPaperResponse> paperResponses = paperService.getMyPapers(userId);
         return ResponseEntity.ok(paperResponses);
     }
 
