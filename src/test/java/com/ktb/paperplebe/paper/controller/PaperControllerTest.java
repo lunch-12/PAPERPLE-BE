@@ -77,7 +77,8 @@ public class PaperControllerTest {
                         fieldWithPath("newspaperLink").description("신문 링크"),
                         fieldWithPath("view").description("조회수"),
                         fieldWithPath("newspaperSummary").description("신문 요약"),
-                        fieldWithPath("image").description("이미지 URL")
+                        fieldWithPath("image").description("이미지 URL"),
+                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
                 ),
                 responseFields(
                         fieldWithPath("paperId").type(NUMBER).description("페이퍼 ID"),
@@ -85,7 +86,8 @@ public class PaperControllerTest {
                         fieldWithPath("newspaperLink").type(STRING).description("신문 링크"),
                         fieldWithPath("view").type(NUMBER).description("조회수"),
                         fieldWithPath("newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("image").type(STRING).description("이미지 URL")
+                        fieldWithPath("image").type(STRING).description("이미지 URL"),
+                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
                 )
         ));
     }
@@ -116,7 +118,8 @@ public class PaperControllerTest {
                         fieldWithPath("newspaperLink").type(STRING).description("신문 링크"),
                         fieldWithPath("view").type(NUMBER).description("조회수"),
                         fieldWithPath("newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("image").type(STRING).description("이미지 URL")
+                        fieldWithPath("image").type(STRING).description("이미지 URL"),
+                        fieldWithPath("createdAt").description("생성 시간")
                 )
         ));
     }
@@ -149,7 +152,8 @@ public class PaperControllerTest {
                         fieldWithPath("newspaperLink").description("신문 링크"),
                         fieldWithPath("view").description("조회수"),
                         fieldWithPath("newspaperSummary").description("신문 요약"),
-                        fieldWithPath("image").description("이미지 URL")
+                        fieldWithPath("image").description("이미지 URL"),
+                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
                 ),
                 responseFields(
                         fieldWithPath("paperId").type(NUMBER).description("페이퍼 ID"),
@@ -157,7 +161,8 @@ public class PaperControllerTest {
                         fieldWithPath("newspaperLink").type(STRING).description("신문 링크"),
                         fieldWithPath("view").type(NUMBER).description("조회수"),
                         fieldWithPath("newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("image").type(STRING).description("이미지 URL")
+                        fieldWithPath("image").type(STRING).description("이미지 URL"),
+                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
                 )
         ));
     }

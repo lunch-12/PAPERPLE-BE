@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/paper")
 @RestController
@@ -16,8 +18,8 @@ public class PaperController {
 
     @PostMapping
     public ResponseEntity<?> createPaper(
-            @RequestBody final PaperRequest paperRequest
-            ,@AuthenticationPrincipal Long userId) {
+            @RequestBody final PaperRequest paperRequest,
+            @AuthenticationPrincipal Long userId) {
         final PaperResponse paperResponse = paperService.createPaper(paperRequest, userId);
         return ResponseEntity.ok(paperResponse);
     }
@@ -28,8 +30,14 @@ public class PaperController {
         return ResponseEntity.ok(paperResponse);
     }
 
+    @GetMapping("/my-papers")
+    public ResponseEntity<?> getMyPapers(@AuthenticationPrincipal Long userId) {
+        List<PaperResponse> paperResponses = paperService.getPapersByUser(userId);
+        return ResponseEntity.ok(paperResponses);
+    }
+
     @PatchMapping("/{paperId}")
-    public ResponseEntity<?> updateRoom(
+    public ResponseEntity<?> updatePaper(
             @PathVariable Long paperId,
             @RequestBody final PaperRequest paperRequest) {
         final PaperResponse paperResponse = paperService.updatePaper(paperId, paperRequest);

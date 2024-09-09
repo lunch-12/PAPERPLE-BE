@@ -2,13 +2,16 @@ package com.ktb.paperplebe.paper.dto;
 
 import com.ktb.paperplebe.paper.entity.Paper;
 
+import java.time.LocalDateTime;
+
 public record PaperResponse(
         Long paperId,
         String content,
         String newspaperLink,
         int view,
         String newspaperSummary,
-        String image
+        String image,
+        LocalDateTime createdAt
 ) {
     public static PaperResponse of(final Paper paper) {
         return new PaperResponse(
@@ -17,7 +20,8 @@ public record PaperResponse(
                 paper.getNewspaperLink(),
                 paper.getView(),
                 paper.getNewspaperSummary(),
-                paper.getImage()
+                paper.getImage(),
+                paper.getCreatedAt()
         );
     }
 }

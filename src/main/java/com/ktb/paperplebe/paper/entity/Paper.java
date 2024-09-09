@@ -42,6 +42,9 @@ public class Paper {
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PaperLike> likes = new ArrayList<>();
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image, final User user) {
         this.content = content;
         this.newspaperLink = newspaperLink;
@@ -91,5 +94,10 @@ public class Paper {
 
     public void updateImage(final String image) {
         this.image = image;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }

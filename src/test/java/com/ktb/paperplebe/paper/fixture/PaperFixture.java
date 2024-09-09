@@ -8,6 +8,7 @@ import com.ktb.paperplebe.user.constant.UserRole;
 import com.ktb.paperplebe.user.entity.User;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,11 +66,13 @@ public class PaperFixture {
 
     public static PaperResponse createPaperResponse1() {
         Paper paper = createPaper1();
+        ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
         return PaperResponse.of(paper);
     }
 
     public static PaperResponse createPaperResponse2() {
         Paper paper = createPaper2();
+        ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
         return PaperResponse.of(paper);
     }
 
