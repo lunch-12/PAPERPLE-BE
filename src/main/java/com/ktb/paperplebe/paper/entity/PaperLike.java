@@ -22,7 +22,7 @@ public class PaperLike {
     private Paper paper;
 
 //    @ManyToOne
-//    @JoinColumn(name = "member_id")
+//    @JoinColumn(name = "member_id")ac
 //    private Member member;
 
     @Builder

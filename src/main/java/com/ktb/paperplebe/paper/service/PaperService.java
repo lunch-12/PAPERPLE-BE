@@ -54,10 +54,12 @@ public class PaperService {
         return PaperResponse.of(paper);
     }
 
-    public List<PaperResponse> getPaperList(Pageable pageable) {
-        Page<Paper> paperPage = paperRepository.findAll(pageable);
-        Page<PaperResponse> paperResponses = paperPage.map(PaperResponse::of);
-        return paperResponses.getContent();
+    public List<PaperResponse> getPaperList(Pageable pageable, String orderBy) {
+        List<Paper> papers;
+
+        papers = paperRepository.findAllOrderByLikesOrCreatedAt(pageable, orderBy);
+
+        return papers.stream().map(PaperResponse::of).toList();
     }
 
     @Transactional

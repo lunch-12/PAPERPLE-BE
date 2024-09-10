@@ -33,10 +33,10 @@ public class PaperController {
 
     @GetMapping
     public ResponseEntity<?> getPaperList(@RequestParam(defaultValue = "0") final int page,
-                                      @RequestParam(defaultValue = "20") final int size,
-                                      @RequestParam(defaultValue = "id") final String orderBy) {
-        final Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        final List<PaperResponse> paperListResponse = paperService.getPaperList(pageable);
+                                          @RequestParam(defaultValue = "20") final int size,
+                                          @RequestParam(defaultValue = "createdAt") final String orderBy) {
+        final Pageable pageable = PageRequest.of(page, size);
+        final List<PaperResponse> paperListResponse = paperService.getPaperList(pageable, orderBy);
         return ResponseEntity.ok(paperListResponse);
     }
 
