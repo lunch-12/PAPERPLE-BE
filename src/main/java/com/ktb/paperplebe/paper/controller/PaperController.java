@@ -43,6 +43,7 @@ public class PaperController {
         final Pageable pageable = PageRequest.of(page, size);
         final List<PaperResponse> paperListResponse = paperService.getPaperList(pageable, orderBy);
         return ResponseEntity.ok(paperListResponse);
+    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserPapers(@PathVariable Long userId, @AuthenticationPrincipal Long currentUserId) {

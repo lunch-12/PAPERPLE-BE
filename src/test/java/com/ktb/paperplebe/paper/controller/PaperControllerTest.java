@@ -1,8 +1,10 @@
 package com.ktb.paperplebe.paper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktb.paperplebe.PaperpleBeApplication;
 import com.ktb.paperplebe.auth.config.jwt.JwtAuthorizationFilter;
 import com.ktb.paperplebe.auth.config.jwt.JwtUtil;
+import com.ktb.paperplebe.aws.config.AwsS3Config;
 import com.ktb.paperplebe.paper.dto.PaperRequest;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.dto.UserPaperResponse;
@@ -13,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -42,6 +44,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
+@ComponentScan(
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AwsS3Config.class)
+        }
+)
 public class PaperControllerTest {
 
     @Autowired
@@ -162,38 +171,39 @@ public void getMyPapers() throws Exception {
 }
   
   @Test
-    @DisplayName("페이퍼 목록 조회")
-    @WithMockUser
-    public void getPaperList() throws Exception {
-        // given
-        final List<PaperResponse> paperResponseList = PaperFixture.createPaperResponseList();
+@DisplayName("페이퍼 목록 조회")
+@WithMockUser
+public void getPaperList() throws Exception {
+    // given
+    final List<PaperResponse> paperResponseList = PaperFixture.createPaperResponseList();
 
-        // 페이퍼 목록 조회 시, 페이퍼 응답 리스트 반환을 기대
-        given(paperService.getPaperList(any(Pageable.class), any(String.class))).willReturn(paperResponseList);
+    // 페이퍼 목록 조회 시, 페이퍼 응답 리스트 반환을 기대
+    given(paperService.getPaperList(any(Pageable.class), any(String.class))).willReturn(paperResponseList);
 
-        // when
-        ResultActions resultActions = mockMvc.perform(get("/paper")
-                .param("orderBy", "createdAt") // 정렬 기준 (생성일자 순)
-                .contentType(MediaType.APPLICATION_JSON)
-        );
+    // when
+    ResultActions resultActions = mockMvc.perform(get("/paper")
+            .param("orderBy", "createdAt") // 정렬 기준 (생성일자 순)
+            .contentType(MediaType.APPLICATION_JSON)
+    );
 
-        // then
-        resultActions.andExpect(status().isOk());
+    // then
+    resultActions.andExpect(status().isOk());
 
-        // restdocs
-        resultActions.andDo(document("페이퍼 목록 조회",
-                queryParameters(
-                        parameterWithName("orderBy").description("정렬 기준 (createdAt: 생성일자 순, like: 좋아요 순)")
-                ),
-                responseFields(
-                        fieldWithPath("[].paperId").type(NUMBER).description("페이퍼 ID"),
-                        fieldWithPath("[].content").type(STRING).description("내용"),
-                        fieldWithPath("[].newspaperLink").type(STRING).description("뉴스 링크"),
-                        fieldWithPath("[].view").type(NUMBER).description("조회수"),
-                        fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("[].image").type(STRING).description("이미지 URL")
-                )
-        ));
+    // restdocs
+    resultActions.andDo(document("페이퍼 목록 조회",
+            queryParameters(
+                    parameterWithName("orderBy").description("정렬 기준 (createdAt: 생성일자 순, like: 좋아요 순)")
+            ),
+            responseFields(
+                    fieldWithPath("[].paperId").type(NUMBER).description("페이퍼 ID"),
+                    fieldWithPath("[].content").type(STRING).description("내용"),
+                    fieldWithPath("[].newspaperLink").type(STRING).description("뉴스 링크"),
+                    fieldWithPath("[].view").type(NUMBER).description("조회수"),
+                    fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
+                    fieldWithPath("[].image").type(STRING).description("이미지 URL"),
+                    fieldWithPath("[].createdAt").type(STRING).optional().description("생성 시간")
+            )
+    ));
     }
   
     @Test

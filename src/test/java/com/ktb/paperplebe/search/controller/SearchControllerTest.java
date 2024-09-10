@@ -80,7 +80,8 @@ public class SearchControllerTest {
                         fieldWithPath("papers[].newspaperLink").type(STRING).description("신문 링크"),
                         fieldWithPath("papers[].view").type(NUMBER).description("조회수"),
                         fieldWithPath("papers[].newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("papers[].image").type(STRING).description("이미지 URL")
+                        fieldWithPath("papers[].image").type(STRING).description("이미지 URL"),
+                        fieldWithPath("papers[].createdAt").type(STRING).description("생성 시간")
                 )
         ));
     }
