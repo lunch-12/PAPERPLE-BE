@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PaperRepository extends JpaRepository<Paper, Long>, PaperRepositoryQuerydsl{
     List<Paper> findByContentContaining(String keyword , Pageable pageable);
+    List<Paper> findByUserId(Long userId);
 }

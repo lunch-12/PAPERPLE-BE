@@ -1,6 +1,7 @@
 package com.ktb.paperplebe.paper.entity;
 
 import com.ktb.paperplebe.common.entity.BaseEntity;
+import com.ktb.paperplebe.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,19 +36,27 @@ public class Paper extends BaseEntity {
     @Column(length = 255)
     private String image;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PaperLike> likes = new ArrayList<>();
 
-    private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image, final User user) {
         this.content = content;
         this.newspaperLink = newspaperLink;
         this.view = view;
         this.newspaperSummary = newspaperSummary;
         this.image = image;
+        this.user = user;
     }
 
-    public static Paper of(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image) {
-        return new Paper(content, newspaperLink, view, newspaperSummary, image);
+    public static Paper of(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image, final User user) {
+        return new Paper(content, newspaperLink, view, newspaperSummary, image, user);
     }
 
     // 좋아요 수 관련 메서드
@@ -86,5 +95,10 @@ public class Paper extends BaseEntity {
 
     public void updateImage(final String image) {
         this.image = image;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }

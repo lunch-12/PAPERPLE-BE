@@ -58,7 +58,7 @@ public class PaperLikeControllerTest {
     @WithMockUser
     public void increaseLikeCount() throws Exception {
         // given
-        willDoNothing().given(paperLikeFacade).increaseLikeCount(anyLong());
+        willDoNothing().given(paperLikeFacade).increaseLikeCount(anyLong(), anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
@@ -83,7 +83,7 @@ public class PaperLikeControllerTest {
     @WithMockUser
     public void decreaseLikeCount() throws Exception {
         // given
-        willDoNothing().given(paperLikeFacade).decreaseLikeCount(anyLong());
+        willDoNothing().given(paperLikeFacade).decreaseLikeCount(anyLong(), anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
@@ -109,7 +109,7 @@ public class PaperLikeControllerTest {
     public void getLikeStatus() throws Exception {
         // given
         Map<Long, Boolean> likeStatus = PaperLikeFixture.createLikeStatus();
-        given(paperLikeService.getLikeStatus(any())).willReturn(likeStatus);
+        given(paperLikeService.getLikeStatus(any(), any())).willReturn(likeStatus);
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/paper/likes")

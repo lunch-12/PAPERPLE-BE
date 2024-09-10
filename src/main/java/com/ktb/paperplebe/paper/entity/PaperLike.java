@@ -1,5 +1,6 @@
 package com.ktb.paperplebe.paper.entity;
 
+import com.ktb.paperplebe.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,17 +22,16 @@ public class PaperLike {
     @JoinColumn(name = "paper_id")
     private Paper paper;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")ac
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Builder
-    public PaperLike(Paper paper
-            //, Member member
+    public PaperLike(Paper paper, User user
     ) {
         this.paper = paper;
-        //this.member = member;
-        //assignPaper(paper);
+        this.user = user;
+        assignPaper(paper);
     }
 
     public PaperLike() {
