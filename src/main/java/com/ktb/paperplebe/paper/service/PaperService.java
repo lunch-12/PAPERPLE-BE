@@ -10,6 +10,8 @@ import com.ktb.paperplebe.paper.repository.PaperRepository;
 import com.ktb.paperplebe.user.entity.User;
 import com.ktb.paperplebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +66,13 @@ public class PaperService {
         return PaperResponse.of(paper);
     }
 
+    public List<PaperResponse> getPaperList(Pageable pageable, String orderBy) {
+        List<Paper> papers;
+
+        papers = paperRepository.findAllOrderByLikesOrCreatedAt(pageable, orderBy);
+
+        return papers.stream().map(PaperResponse::of).toList();
+      
     public List<UserPaperResponse> getMyPapers(Long userId) {
         User user = userService.findById(userId);
         List<Paper> papers = paperRepository.findByUserId(userId);

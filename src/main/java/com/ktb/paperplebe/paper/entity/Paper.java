@@ -1,5 +1,6 @@
 package com.ktb.paperplebe.paper.entity;
 
+import com.ktb.paperplebe.common.entity.BaseEntity;
 import com.ktb.paperplebe.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Paper {
+public class Paper extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

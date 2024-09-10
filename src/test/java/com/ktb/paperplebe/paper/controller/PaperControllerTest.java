@@ -12,10 +12,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,24 +29,19 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
-
-
-@WebMvcTest(value = PaperController.class, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
-})
+@SpringBootTest
 @AutoConfigureRestDocs
+@AutoConfigureMockMvc
 public class PaperControllerTest {
 
     @Autowired
@@ -129,18 +127,54 @@ public class PaperControllerTest {
         ));
     }
 
-    @Test
+@Test
+@DisplayName("페이퍼 목록 조회")
+@WithMockUser
+public void getMyPapers() throws Exception {
+    // given
+    final List<UserPaperResponse> expectedResponse = PaperFixture.createUserPaperResponseList();
+    given(paperService.getMyPapers(any())).willReturn(expectedResponse);
+
+    // when
+    ResultActions resultActions = mockMvc.perform(get("/paper/my-papers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(csrf().asHeader())
+    );
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+    // restdocs
+    resultActions.andDo(document("페이퍼 목록 조회",
+            responseFields(
+                    fieldWithPath("[].paperId").type(NUMBER).description("페이퍼 ID"),
+                    fieldWithPath("[].content").type(STRING).description("내용"),
+                    fieldWithPath("[].newspaperLink").type(STRING).description("신문 링크"),
+                    fieldWithPath("[].view").type(NUMBER).description("조회수"),
+                    fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
+                    fieldWithPath("[].image").type(STRING).optional().description("이미지 URL"),
+                    fieldWithPath("[].createdAt").type(STRING).description("생성 시간"),
+                    fieldWithPath("[].nickname").type(STRING).description("작성자 닉네임"),
+                    fieldWithPath("[].profileImage").type(STRING).description("작성자 프로필 이미지 URL"),
+                    fieldWithPath("[].isLikedByCurrentUser").type(BOOLEAN).description("현재 로그인한 유저의 좋아요 여부")
+            )
+    ));
+}
+  
+  @Test
     @DisplayName("페이퍼 목록 조회")
     @WithMockUser
-    public void getMyPapers() throws Exception {
+    public void getPaperList() throws Exception {
         // given
-        final List<UserPaperResponse> expectedResponse = PaperFixture.createUserPaperResponseList();
-        given(paperService.getMyPapers(any())).willReturn(expectedResponse);
+        final List<PaperResponse> paperResponseList = PaperFixture.createPaperResponseList();
+
+        // 페이퍼 목록 조회 시, 페이퍼 응답 리스트 반환을 기대
+        given(paperService.getPaperList(any(Pageable.class), any(String.class))).willReturn(paperResponseList);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/paper/my-papers")
+        ResultActions resultActions = mockMvc.perform(get("/paper")
+                .param("orderBy", "createdAt") // 정렬 기준 (생성일자 순)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(csrf().asHeader())
         );
 
         // then
@@ -148,22 +182,20 @@ public class PaperControllerTest {
 
         // restdocs
         resultActions.andDo(document("페이퍼 목록 조회",
+                queryParameters(
+                        parameterWithName("orderBy").description("정렬 기준 (createdAt: 생성일자 순, like: 좋아요 순)")
+                ),
                 responseFields(
                         fieldWithPath("[].paperId").type(NUMBER).description("페이퍼 ID"),
                         fieldWithPath("[].content").type(STRING).description("내용"),
-                        fieldWithPath("[].newspaperLink").type(STRING).description("신문 링크"),
+                        fieldWithPath("[].newspaperLink").type(STRING).description("뉴스 링크"),
                         fieldWithPath("[].view").type(NUMBER).description("조회수"),
                         fieldWithPath("[].newspaperSummary").type(STRING).description("신문 요약"),
-                        fieldWithPath("[].image").type(STRING).optional().description("이미지 URL"),
-                        fieldWithPath("[].createdAt").type(STRING).description("생성 시간"),
-                        fieldWithPath("[].nickname").type(STRING).description("작성자 닉네임"),
-                        fieldWithPath("[].profileImage").type(STRING).description("작성자 프로필 이미지 URL"),
-                        fieldWithPath("[].isLikedByCurrentUser").type(BOOLEAN).description("현재 로그인한 유저의 좋아요 여부")
+                        fieldWithPath("[].image").type(STRING).description("이미지 URL")
                 )
         ));
     }
-
-
+  
     @Test
     @DisplayName("페이퍼 수정")
     @WithMockUser

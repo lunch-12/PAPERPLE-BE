@@ -5,6 +5,10 @@ import com.ktb.paperplebe.paper.dto.PaperResponse;
 import com.ktb.paperplebe.paper.dto.UserPaperResponse;
 import com.ktb.paperplebe.paper.service.PaperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,15 @@ public class PaperController {
         return ResponseEntity.ok(paperResponse);
     }
 
+
+    @GetMapping
+    public ResponseEntity<?> getPaperList(@RequestParam(defaultValue = "0") final int page,
+                                          @RequestParam(defaultValue = "20") final int size,
+                                          @RequestParam(defaultValue = "createdAt") final String orderBy) {
+        final Pageable pageable = PageRequest.of(page, size);
+        final List<PaperResponse> paperListResponse = paperService.getPaperList(pageable, orderBy);
+        return ResponseEntity.ok(paperListResponse);
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserPapers(@PathVariable Long userId, @AuthenticationPrincipal Long currentUserId) {
         List<UserPaperResponse> paperResponses = paperService.getPapersByUser(userId, currentUserId);
@@ -41,6 +54,7 @@ public class PaperController {
     public ResponseEntity<?> getMyPapers(@AuthenticationPrincipal Long userId) {
         List<UserPaperResponse> paperResponses = paperService.getMyPapers(userId);
         return ResponseEntity.ok(paperResponses);
+
     }
 
     @PatchMapping("/{paperId}")
