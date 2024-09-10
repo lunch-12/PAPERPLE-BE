@@ -38,7 +38,7 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        // TO DO - 배포한 prod 도메인 주소 추가
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept", "Origin"));
         configuration.setExposedHeaders(List.of("Authorization", "Location", "X-Custom-Header"));
