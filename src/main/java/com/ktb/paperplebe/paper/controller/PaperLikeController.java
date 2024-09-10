@@ -3,7 +3,10 @@ package com.ktb.paperplebe.paper.controller;
 import com.ktb.paperplebe.common.dto.SuccessResponse;
 import com.ktb.paperplebe.paper.service.PaperLikeFacade;
 import com.ktb.paperplebe.paper.service.PaperLikeService;
+import com.ktb.paperplebe.user.constant.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,32 +27,34 @@ public class PaperLikeController {
     private final PaperLikeFacade paperLikeFacade;
 
     @PostMapping("/{paperId}/likes")
+    @Secured(UserRole.ROLE_USER_VALUE)
     public SuccessResponse increaseLikeCount(
-            //@AuthenticationPrincipal Long memberId,
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long paperId) throws InterruptedException {
         paperLikeFacade.increaseLikeCount(
-                //memberId,
+                userId,
                 paperId);
         return new SuccessResponse();
     }
 
     @DeleteMapping("/{paperId}/likes")
+    @Secured(UserRole.ROLE_USER_VALUE)
     public SuccessResponse decreaseLikeCount(
-            //@AuthenticationPrincipal Long memberId,
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long paperId) throws InterruptedException {
         paperLikeFacade.decreaseLikeCount(
-               //memberId,
+                userId,
                 paperId);
         return new SuccessResponse();
     }
 
     @GetMapping("/likes")
-    //@Secured(value = "ROLE_MEMBER")
+    @Secured(UserRole.ROLE_USER_VALUE)
     public Map<Long, Boolean> getLikeStatus(
-            //@AuthenticationPrincipal Long memberId,
+            @AuthenticationPrincipal Long userId,
             @RequestParam("paperIds") List<Long> paperIds) {
         return paperLikeService.getLikeStatus(
-                //memberId,
+                userId,
                 paperIds);
     }
 }

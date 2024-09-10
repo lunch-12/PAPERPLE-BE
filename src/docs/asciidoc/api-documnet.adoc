@@ -26,6 +26,17 @@ include::{snippets}/페이퍼 조회/http-request.adoc[]
 include::{snippets}/페이퍼 조회/http-response.adoc[]
 include::{snippets}/페이퍼 조회/response-fields.adoc[]
 
+=== 페이퍼 목록 조회
+
+==== 요청
+
+include::{snippets}/페이퍼 목록 조회/http-request.adoc[]
+include::{snippets}/페이퍼 목록 조회/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/페이퍼 목록 조회/http-response.adoc[]
+include::{snippets}/페이퍼 목록 조회/response-fields.adoc[]
+
 === 수정
 
 ==== 요청
@@ -77,6 +88,19 @@ include::{snippets}/좋아요 상태 조회/http-request.adoc[]
 ==== 응답
 include::{snippets}/좋아요 상태 조회/http-response.adoc[]
 include::{snippets}/좋아요 상태 조회/response-fields.adoc[]
+
+== 검색
+
+=== 검색 조회
+
+==== 요청
+
+include::{snippets}/검색/http-request.adoc[]
+include::{snippets}/검색/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/검색/http-response.adoc[]
+include::{snippets}/검색/response-fields.adoc[]
 
 == 사용자
 

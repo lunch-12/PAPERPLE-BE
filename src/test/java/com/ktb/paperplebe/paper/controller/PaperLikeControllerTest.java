@@ -10,7 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -34,11 +36,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Map;
 
-@WebMvcTest(value = PaperLikeController.class, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthorizationFilter.class),
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtUtil.class),
-})
+@SpringBootTest
 @AutoConfigureRestDocs
+@AutoConfigureMockMvc
 public class PaperLikeControllerTest {
 
     @Autowired
@@ -58,7 +58,7 @@ public class PaperLikeControllerTest {
     @WithMockUser
     public void increaseLikeCount() throws Exception {
         // given
-        willDoNothing().given(paperLikeFacade).increaseLikeCount(anyLong());
+        willDoNothing().given(paperLikeFacade).increaseLikeCount(anyLong(), anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
@@ -83,7 +83,7 @@ public class PaperLikeControllerTest {
     @WithMockUser
     public void decreaseLikeCount() throws Exception {
         // given
-        willDoNothing().given(paperLikeFacade).decreaseLikeCount(anyLong());
+        willDoNothing().given(paperLikeFacade).decreaseLikeCount(anyLong(), anyLong());
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/paper/{paperId}/likes", PaperLikeFixture.PAPER_ID_1)
@@ -109,7 +109,7 @@ public class PaperLikeControllerTest {
     public void getLikeStatus() throws Exception {
         // given
         Map<Long, Boolean> likeStatus = PaperLikeFixture.createLikeStatus();
-        given(paperLikeService.getLikeStatus(any())).willReturn(likeStatus);
+        given(paperLikeService.getLikeStatus(any(), any())).willReturn(likeStatus);
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/paper/likes")
