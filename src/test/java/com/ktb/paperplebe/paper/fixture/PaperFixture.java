@@ -72,13 +72,13 @@ public class PaperFixture {
     public static PaperResponse createPaperResponse1() {
         Paper paper = createPaper1();
         ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
-        return PaperResponse.of(paper);
+        return PaperResponse.of(paper, paper.getUser());
     }
 
     public static PaperResponse createPaperResponse2() {
         Paper paper = createPaper2();
         ReflectionTestUtils.setField(paper, "createdAt", LocalDateTime.now());
-        return PaperResponse.of(paper);
+        return PaperResponse.of(paper, paper.getUser());
     }
 
     public static List<PaperResponse> createPaperResponseList() {
