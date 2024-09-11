@@ -1,6 +1,7 @@
 package com.ktb.paperplebe.paper.dto;
 
 import com.ktb.paperplebe.paper.entity.Paper;
+import com.ktb.paperplebe.user.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,9 +13,12 @@ public record PaperResponse(
         List<String> tags,
         String newspaperSummary,
         String image,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        String nickname,
+        String profileImage
+
 ) {
-    public static PaperResponse of(final Paper paper) {
+    public static PaperResponse of(final Paper paper, final User user) {
         return new PaperResponse(
                 paper.getId(),
                 paper.getContent(),
@@ -22,7 +26,9 @@ public record PaperResponse(
                 paper.getTags(),
                 paper.getNewspaperSummary(),
                 paper.getImage(),
-                paper.getCreatedAt()
+                paper.getCreatedAt(),
+                user.getNickname(),
+                user.getProfileImage()
         );
     }
 }

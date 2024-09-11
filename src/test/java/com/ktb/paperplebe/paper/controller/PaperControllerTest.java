@@ -97,7 +97,9 @@ public class PaperControllerTest {
                         fieldWithPath("tags").type(ARRAY).description("조회수"),
                         fieldWithPath("newspaperSummary").type(STRING).description("신문 요약"),
                         fieldWithPath("image").type(STRING).description("이미지 URL"),
-                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
+                        fieldWithPath("createdAt").type(STRING).description("생성 시간"),
+                        fieldWithPath("nickname").type(STRING).description("유저 닉네임"),
+                        fieldWithPath("profileImage").type(STRING).description("유저 프로필")
                 )
         ));
     }

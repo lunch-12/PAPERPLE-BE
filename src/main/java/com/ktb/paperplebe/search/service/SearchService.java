@@ -23,7 +23,7 @@ public class SearchService {
         List<Paper> papers = paperRepository.findByContentContaining(searchRequest.keyword(), pageable);
 
         List<PaperResponse> paperResponses = papers.stream()
-                .map(PaperResponse::of)
+                .map(paper -> PaperResponse.of(paper, paper.getUser()))
                 .collect(Collectors.toList());
 
         return SearchResponse.of(paperResponses);
