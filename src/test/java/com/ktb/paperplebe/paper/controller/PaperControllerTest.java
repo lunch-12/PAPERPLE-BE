@@ -33,9 +33,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -87,7 +85,7 @@ public class PaperControllerTest {
                 requestFields(
                         fieldWithPath("content").description("내용"),
                         fieldWithPath("newspaperLink").description("신문 링크"),
-                        fieldWithPath("view").description("조회수"),
+                        fieldWithPath("tags").description("태그"),
                         fieldWithPath("newspaperSummary").description("신문 요약"),
                         fieldWithPath("image").description("이미지 URL"),
                         fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
@@ -96,10 +94,12 @@ public class PaperControllerTest {
                         fieldWithPath("paperId").type(NUMBER).description("페이퍼 ID"),
                         fieldWithPath("content").type(STRING).description("내용"),
                         fieldWithPath("newspaperLink").type(STRING).description("신문 링크"),
-                        fieldWithPath("view").type(NUMBER).description("조회수"),
+                        fieldWithPath("tags").type(ARRAY).description("조회수"),
                         fieldWithPath("newspaperSummary").type(STRING).description("신문 요약"),
                         fieldWithPath("image").type(STRING).description("이미지 URL"),
-                        fieldWithPath("createdAt").type(STRING).optional().description("생성 시간")
+                        fieldWithPath("createdAt").type(STRING).description("생성 시간"),
+                        fieldWithPath("nickname").type(STRING).description("유저 닉네임"),
+                        fieldWithPath("profileImage").type(STRING).description("유저 프로필")
                 )
         ));
     }

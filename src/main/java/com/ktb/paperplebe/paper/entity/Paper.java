@@ -1,6 +1,7 @@
 package com.ktb.paperplebe.paper.entity;
 
 import com.ktb.paperplebe.common.entity.BaseEntity;
+import com.ktb.paperplebe.paper.util.ListToJsonConverter;
 import com.ktb.paperplebe.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -30,8 +31,9 @@ public class Paper extends BaseEntity {
     @Column(length = 255)
     private String newspaperSummary;
 
-    @Column(nullable = false)
-    private int view = 0;
+    @Column(name = "tags", columnDefinition = "json")
+    @Convert(converter = ListToJsonConverter.class)
+    private List<String> tags;
 
     @Column(length = 255)
     private String image;
@@ -46,17 +48,17 @@ public class Paper extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    private Paper(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image, final User user) {
+    private Paper(final String content, final String newspaperLink, final List<String> tags, final String newspaperSummary, final String image, final User user) {
         this.content = content;
         this.newspaperLink = newspaperLink;
-        this.view = view;
+        this.tags = tags;
         this.newspaperSummary = newspaperSummary;
         this.image = image;
         this.user = user;
     }
 
-    public static Paper of(final String content, final String newspaperLink, final int view, final String newspaperSummary, final String image, final User user) {
-        return new Paper(content, newspaperLink, view, newspaperSummary, image, user);
+    public static Paper of(final String content, final String newspaperLink, final List<String> tags, final String newspaperSummary, final String image, final User user) {
+        return new Paper(content, newspaperLink, tags, newspaperSummary, image, user);
     }
 
     // 좋아요 수 관련 메서드
@@ -80,12 +82,6 @@ public class Paper extends BaseEntity {
     public void updateNewspaperLink(final String newspaperLink) {
         if (newspaperLink != null && !newspaperLink.isEmpty()) {
             this.newspaperLink = newspaperLink;
-        }
-    }
-
-    public void updateView(final int view) {
-        if (view >= 0) {
-            this.view = view;
         }
     }
 

@@ -3,13 +3,14 @@ package com.ktb.paperplebe.paper.dto;
 import com.ktb.paperplebe.paper.entity.Paper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public record UserPaperResponse(
         Long paperId,
         String content,
         String newspaperLink,
-        int view,
+        List<String> tags,
         String newspaperSummary,
         String image,
         LocalDateTime createdAt,
@@ -22,7 +23,7 @@ public record UserPaperResponse(
                 paper.getId(),
                 paper.getContent(),
                 paper.getNewspaperLink(),
-                paper.getView(),
+                paper.getTags(),
                 paper.getNewspaperSummary(),
                 paper.getImage(),
                 paper.getCreatedAt(),

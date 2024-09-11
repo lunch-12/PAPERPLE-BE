@@ -11,6 +11,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,8 @@ public class PaperFixture {
     private static final String NEWSPAPER_LINK_1 = "http://example.com/article1";
     private static final String NEWSPAPER_LINK_2 = "http://example.com/article2";
 
-    private static final int VIEW_COUNT_1 = 100;
-    private static final int VIEW_COUNT_2 = 200;
+    private static final List<String> TAGS_1 = Arrays.asList("태그1", "태그2");
+    private static final List<String> TAGS_2 = Arrays.asList("태그1", "태그2");
 
     private static final String SUMMARY_1 = "Summary 1";
     private static final String SUMMARY_2 = "Summary 2";
@@ -49,23 +50,23 @@ public class PaperFixture {
     }
 
     public static Paper createPaper1() {
-        Paper paper = Paper.of(PAPER_TITLE_1, NEWSPAPER_LINK_1, VIEW_COUNT_1, SUMMARY_1, IMAGE_URL_1, DUMMY_USER);
+        Paper paper = Paper.of(PAPER_TITLE_1, NEWSPAPER_LINK_1, TAGS_1, SUMMARY_1, IMAGE_URL_1, DUMMY_USER);
         ReflectionTestUtils.setField(paper, "id", PAPER_ID_1);
         return paper;
     }
 
     public static Paper createPaper2() {
-        Paper paper = Paper.of(PAPER_TITLE_2, NEWSPAPER_LINK_2, VIEW_COUNT_2, SUMMARY_2, IMAGE_URL_2, DUMMY_USER);
+        Paper paper = Paper.of(PAPER_TITLE_2, NEWSPAPER_LINK_2, TAGS_2, SUMMARY_2, IMAGE_URL_2, DUMMY_USER);
         ReflectionTestUtils.setField(paper, "id", PAPER_ID_2);
         return paper;
     }
 
     public static PaperRequest createPaperRequest1() {
-        return new PaperRequest(PAPER_TITLE_1, NEWSPAPER_LINK_1, VIEW_COUNT_1, SUMMARY_1, IMAGE_URL_1);
+        return new PaperRequest(PAPER_TITLE_1, NEWSPAPER_LINK_1, TAGS_1, SUMMARY_1, IMAGE_URL_1);
     }
 
     public static PaperRequest createPaperRequest2() {
-        return new PaperRequest(PAPER_TITLE_2, NEWSPAPER_LINK_2, VIEW_COUNT_2, SUMMARY_2, IMAGE_URL_2);
+        return new PaperRequest(PAPER_TITLE_2, NEWSPAPER_LINK_2, TAGS_2, SUMMARY_2, IMAGE_URL_2);
     }
 
     public static PaperResponse createPaperResponse1() {

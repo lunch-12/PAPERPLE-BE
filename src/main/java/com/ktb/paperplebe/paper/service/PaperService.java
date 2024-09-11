@@ -35,14 +35,14 @@ public class PaperService {
         Paper paper = Paper.of(
                 paperRequest.content(),
                 paperRequest.newspaperLink(),
-                paperRequest.view(),
+                paperRequest.tags(),
                 paperRequest.newspaperSummary(),
                 paperRequest.image(),
                 user
         );
 
         Paper savedPaper = paperRepository.save(paper);
-        return PaperResponse.of(savedPaper);
+        return PaperResponse.of(savedPaper, user);
     }
 
     @Transactional
@@ -51,17 +51,17 @@ public class PaperService {
 
         paper.updateContent(paperRequest.content());
         paper.updateNewspaperLink(paperRequest.newspaperLink());
-        paper.updateView(paperRequest.view());
+        //paper.updateView(paperRequest.view());
         paper.updateNewspaperSummary(paperRequest.newspaperSummary());
         paper.updateImage(paperRequest.image());
 
         paperRepository.save(paper);
-        return PaperResponse.of(paper);
+        return PaperResponse.of(paper, paper.getUser());
     }
 
     public PaperResponse getPaper(Long paperId) {
         Paper paper = findPaperByIdOrThrow(paperId);
-        return PaperResponse.of(paper);
+        return PaperResponse.of(paper, paper.getUser());
     }
 
     public List<PaperResponse> getPaperList(Pageable pageable, String orderBy) {
@@ -69,7 +69,9 @@ public class PaperService {
 
         papers = paperRepository.findAllOrderByLikesOrCreatedAt(pageable, orderBy);
 
-        return papers.stream().map(PaperResponse::of).toList();
+        return papers.stream()
+                .map(paper -> PaperResponse.of(paper, paper.getUser()))
+                .collect(Collectors.toList());
     }
       
     public List<UserPaperResponse> getMyPapers(Long userId) {
