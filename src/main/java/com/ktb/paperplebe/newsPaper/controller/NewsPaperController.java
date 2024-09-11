@@ -1,5 +1,6 @@
 package com.ktb.paperplebe.newsPaper.controller;
 
+import com.ktb.paperplebe.newsPaper.dto.NewsPaperResponse;
 import com.ktb.paperplebe.newsPaper.entity.NewsPaper;
 import com.ktb.paperplebe.newsPaper.service.NewsPaperService;
 import com.ktb.paperplebe.paper.dto.PaperResponse;
@@ -29,7 +30,7 @@ public class NewsPaperController {
                                           @RequestParam(defaultValue = "20") final int size,
                                           @RequestParam(defaultValue = "createdAt") final String orderBy) {
         final Pageable pageable = PageRequest.of(page, size);
-        final List<NewsPaperListResponse> NewsPaperListResponse = newsPaperService.getNewsPaperList(pageable, orderBy);
+        final List<NewsPaperResponse> NewsPaperListResponse = newsPaperService.getNewsPaperList(pageable, orderBy);
         return ResponseEntity.ok(NewsPaperListResponse);
     }
 }
