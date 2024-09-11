@@ -27,6 +27,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -78,10 +79,12 @@ public class SearchControllerTest {
                         fieldWithPath("papers[].paperId").type(NUMBER).description("페이퍼 ID"),
                         fieldWithPath("papers[].content").type(STRING).description("내용"),
                         fieldWithPath("papers[].newspaperLink").type(STRING).description("신문 링크"),
-                        fieldWithPath("papers[].view").type(NUMBER).description("조회수"),
+                        fieldWithPath("papers[].tags").type(ARRAY).description("조회수"),
                         fieldWithPath("papers[].newspaperSummary").type(STRING).description("신문 요약"),
                         fieldWithPath("papers[].image").type(STRING).description("이미지 URL"),
-                        fieldWithPath("papers[].createdAt").type(STRING).description("생성 시간")
+                        fieldWithPath("papers[].createdAt").type(STRING).description("생성 시간"),
+                        fieldWithPath("papers[].nickname").type(STRING).description("유저 닉네임"),
+                        fieldWithPath("papers[].profileImage").type(STRING).description("유저 프로필")
                 )
         ));
     }
