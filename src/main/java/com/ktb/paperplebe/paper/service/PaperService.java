@@ -35,7 +35,7 @@ public class PaperService {
         Paper paper = Paper.of(
                 paperRequest.content(),
                 paperRequest.newspaperLink(),
-                paperRequest.view(),
+                paperRequest.tags(),
                 paperRequest.newspaperSummary(),
                 paperRequest.image(),
                 user
@@ -51,7 +51,7 @@ public class PaperService {
 
         paper.updateContent(paperRequest.content());
         paper.updateNewspaperLink(paperRequest.newspaperLink());
-        paper.updateView(paperRequest.view());
+        //paper.updateView(paperRequest.view());
         paper.updateNewspaperSummary(paperRequest.newspaperSummary());
         paper.updateImage(paperRequest.image());
 
