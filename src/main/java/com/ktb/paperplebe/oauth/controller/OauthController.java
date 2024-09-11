@@ -1,5 +1,6 @@
 package com.ktb.paperplebe.oauth.controller;
 
+import com.ktb.paperplebe.auth.config.jwt.RefreshTokenRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +23,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/oauth")
 public class OauthController {
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @GetMapping("/login-info")
     public ResponseEntity<Map<String, Object>> oauthLoginInfo(Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -32,7 +36,7 @@ public class OauthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         // 쿠키 삭제
         Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN, null);
         accessTokenCookie.setPath("/");
@@ -45,6 +49,21 @@ public class OauthController {
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setMaxAge(0); // 쿠키 즉시 만료
         response.addCookie(refreshTokenCookie);
+
+        String refreshToken = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (REFRESH_TOKEN.equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (refreshToken != null) {
+            refreshTokenRepository.deleteById(refreshToken);
+        }
 
         return ResponseEntity.ok("Logged out successfully");
     }
