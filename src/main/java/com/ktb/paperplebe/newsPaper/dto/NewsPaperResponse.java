@@ -1,11 +1,8 @@
 package com.ktb.paperplebe.newsPaper.dto;
 
 import com.ktb.paperplebe.newsPaper.entity.NewsPaper;
-import com.ktb.paperplebe.paper.entity.Paper;
-import com.ktb.paperplebe.user.entity.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record NewsPaperResponse(
         Long newsPaperId,
@@ -13,7 +10,8 @@ public record NewsPaperResponse(
         String link,
         String image,
         String summary,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime publishedAt
 ) {
     public static NewsPaperResponse of(final NewsPaper newsPaper) {
         return new NewsPaperResponse(
@@ -22,7 +20,8 @@ public record NewsPaperResponse(
                 newsPaper.getLink(),
                 newsPaper.getImage(),
                 newsPaper.getSummary(),
-                newsPaper.getCreatedAt()
+                newsPaper.getCreatedAt(),
+                newsPaper.getPublishedAt()
         );
     }
 }

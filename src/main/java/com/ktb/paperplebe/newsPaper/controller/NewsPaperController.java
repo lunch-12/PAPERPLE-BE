@@ -27,10 +27,9 @@ public class NewsPaperController {
 
     @GetMapping
     public ResponseEntity<?> getNewsPaperList(@RequestParam(defaultValue = "0") final int page,
-                                          @RequestParam(defaultValue = "20") final int size,
-                                          @RequestParam(defaultValue = "createdAt") final String orderBy) {
+                                              @RequestParam(defaultValue = "20") final int size) {
         final Pageable pageable = PageRequest.of(page, size);
-        final List<NewsPaperResponse> NewsPaperListResponse = newsPaperService.getNewsPaperList(pageable, orderBy);
-        return ResponseEntity.ok(NewsPaperListResponse);
+        final List<NewsPaperResponse> newsPaperListResponse = newsPaperService.getNewsPaperList(pageable);
+        return ResponseEntity.ok(newsPaperListResponse);
     }
 }
