@@ -65,9 +65,7 @@ public class PaperService {
     }
 
     public List<PaperResponse> getPaperList(Pageable pageable, String orderBy) {
-        List<Paper> papers;
-
-        papers = paperRepository.findAllOrderByLikesOrCreatedAt(pageable, orderBy);
+        List<Paper> papers = paperRepository.findAllOrderByLikesOrCreatedAt(pageable, orderBy);
 
         return papers.stream()
                 .map(paper -> PaperResponse.of(paper, paper.getUser()))
