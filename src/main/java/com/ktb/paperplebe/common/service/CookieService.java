@@ -22,6 +22,7 @@ public class CookieService {
                 .path("/")
                 .httpOnly(true)
                 .domain(frontendDomain)
+                .sameSite("None")
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class CookieService {
                 .httpOnly(true)
                 .maxAge(0)
                 .domain(frontendDomain)
+                .sameSite("None")
                 .build();
 
         response.addHeader(SET_COOKIE, deleteCookie.toString());
