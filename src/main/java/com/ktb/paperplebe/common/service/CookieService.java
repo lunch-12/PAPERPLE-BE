@@ -13,20 +13,23 @@ import static org.springframework.http.HttpHeaders.SET_COOKIE;
 @RequiredArgsConstructor
 @Slf4j
 public class CookieService {
+
     @Value("${app.properties.frontCookieDomain}")
     private String frontCookieDomain;
-
 
     @Value("${app.properties.cookieSameSite}")
     private String cookieSameSite;
 
-    // TO DO - secure, domain, sameSite 설정 추가
+    @Value("${app.properties.cookieSecure}")
+    private boolean cookieSecure;
+
     public ResponseCookie createCookie(String cookieName, String cookieValue) {
         return ResponseCookie.from(cookieName, cookieValue)
                 .path("/")
                 .httpOnly(true)
                 .domain(frontCookieDomain)
                 .sameSite(cookieSameSite)
+                .secure(cookieSecure)
                 .build();
     }
 
@@ -37,6 +40,7 @@ public class CookieService {
                 .maxAge(0)
                 .domain(frontCookieDomain)
                 .sameSite(cookieSameSite)
+                .secure(cookieSecure)
                 .build();
 
         response.addHeader(SET_COOKIE, deleteCookie.toString());
