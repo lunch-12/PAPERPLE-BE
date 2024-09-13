@@ -21,6 +21,13 @@ import java.util.List;
 public class PaperController {
     private final PaperService paperService;
 
+    @PostMapping("/test")
+    public ResponseEntity<?> test(
+            @RequestBody String url
+    ) {
+        return ResponseEntity.ok(null);
+    }
+
     @PostMapping
     public ResponseEntity<?> createPaper(
             @RequestBody final PaperRequest paperRequest,
