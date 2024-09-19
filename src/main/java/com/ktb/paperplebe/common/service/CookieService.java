@@ -27,7 +27,7 @@ public class CookieService {
         return ResponseCookie.from(cookieName, cookieValue)
                 .path("/")
                 .httpOnly(true)
-                .domain(frontCookieDomain)
+                //.domain(frontCookieDomain)
                 .sameSite(cookieSameSite)
                 .secure(cookieSecure)
                 .build();
@@ -38,7 +38,7 @@ public class CookieService {
                 .path("/")
                 .httpOnly(true)
                 .maxAge(0)
-                .domain(frontCookieDomain)
+                //.domain(frontCookieDomain)
                 .sameSite(cookieSameSite)
                 .secure(cookieSecure)
                 .build();
